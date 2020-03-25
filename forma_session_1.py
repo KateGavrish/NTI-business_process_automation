@@ -69,33 +69,32 @@ class UiMainWindow(QWidget):
 
     def open_path1(self):
         filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
-        try:
-            drons = import_drons(filename)
-        except:
-            pass
         self.lineEdit_drons.setText(filename)
 
     def open_path2(self):
         filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
-        try:
-            komplectuyshye = import_komplecktuyshye(filename)
-        except:
-            pass
         self.lineEdit_komplecktushie.setText(filename)
 
     def open_path3(self):
         filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
-        try:
-            technial_maps = import_technial_map(filename)
-        except:
-            pass
         self.lineEdit_technial_maps.setText(filename)
 
     def download(self):
         filename1 = self.lineEdit_drons.text()
         filename2 = self.lineEdit_komplecktushie.text()
         filename3 = self.lineEdit_technial_maps.text()
-        print(filename1, filename2, filename3)
+        try:
+            drons = import_drons(filename1)
+        except:
+            pass
+        try:
+            komplectuyshye = import_komplecktuyshye(filename2)
+        except:
+            pass
+        try:
+            technial_maps = import_technial_map(filename3)
+        except:
+            pass
 
     def closing(self):
         UiMainWindow.close(self)
