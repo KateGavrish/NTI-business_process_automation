@@ -1,0 +1,1 @@
+fname = QFileDialog.getOpenFileName(self, 'Выбрать документ', '')[0]
