@@ -3,7 +3,7 @@ from sql.data import db_session
 from sql.data import __all_models
 
 
-def import_komplecktuyshye(name):
+def import_details(name):
     wb = openpyxl.load_workbook(filename=name)
     sheet = wb['Лист1']
 

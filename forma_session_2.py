@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QMessageBox
 import sys
 from ecxel_example import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+import datetime
 
 
 class UiMainWindow(QWidget):
@@ -15,7 +16,6 @@ class UiMainWindow(QWidget):
         self.setGeometry(200, 200, 720, 600)
         self.setWindowTitle("Session2")
         self.number = 1
-        self.date = 2
 
         self.pushButton_ok = QPushButton("Ok", self)
         self.pushButton_ok.resize(100, 50)
@@ -25,7 +25,7 @@ class UiMainWindow(QWidget):
         self.pushButton_download = QPushButton("Записать", self)
         self.pushButton_download.resize(100, 50)
         self.pushButton_download.move(130, 520)
-        self.pushButton_download.clicked.connect(self.zapisat)
+        self.pushButton_download.clicked.connect(self.write)
 
         self.pushButton_open_file2 = QPushButton("Закрыть", self)
         self.pushButton_open_file2.resize(100, 50)
@@ -39,7 +39,7 @@ class UiMainWindow(QWidget):
         self.lineEdit_otvetstv.setObjectName("lineEdit")
 
         self.drons = QLabel(self)
-        self.drons.setText(f"Поступление комплектующих {self.number} от {self.date}")
+        self.drons.setText(f"Поступление комплектующих № 000{self.number} от {datetime.datetime.today().strftime('%d.%m.%Y')}")
         self.drons.move(10, 20)
 
         self.komplecktushie = QLabel(self)
@@ -57,7 +57,7 @@ class UiMainWindow(QWidget):
     def ok(self):
         pass
 
-    def zapisat(self):
+    def write(self):
         pass
 
     def closing(self):
