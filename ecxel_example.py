@@ -3,7 +3,7 @@ from sql.data import db_session
 from sql.data import __all_models
 
 
-def load_compl(name):
+def import_komplecktuyshye(name):
     wb = openpyxl.load_workbook(filename=name)
     sheet = wb['Лист1']
 
@@ -19,7 +19,7 @@ def load_compl(name):
             break
     vals = vals[1:]
 
-    db_session.global_init('sql/db/drons.sqlite')
+    db_session.global_init('sql/db/drons1.sqlite')
     for i in range(len(vals)):
         d = __all_models.details.DetailCategory()
         if vals[i][1] is None or vals[i][2] is None:
@@ -32,7 +32,7 @@ def load_compl(name):
     return 'ok'
 
 
-def load_list(name):
+def import_drons(name):
     wb = openpyxl.load_workbook(filename=name)
     sheet = wb['Лист1']
 
@@ -48,7 +48,7 @@ def load_list(name):
             break
     vals = vals[1:]
 
-    db_session.global_init('sql/db/drons.sqlite')
+    db_session.global_init('sql/db/drons1.sqlite')
     for i in range(len(vals)):
         d = __all_models.drons_cost.DronCost()
         if vals[i][1] is None or vals[i][2] is None or type(vals[i][2]) != int:
@@ -61,7 +61,7 @@ def load_list(name):
     return 'ok'
 
 
-def load_quan(name):
+def import_technial_map(name):
     wb = openpyxl.load_workbook(filename=name)
     sheet = wb['Лист1']
 
@@ -77,7 +77,7 @@ def load_quan(name):
             break
     vals = vals[1:]
 
-    db_session.global_init('sql/db/drons.sqlite')
+    db_session.global_init('sql/db/drons1.sqlite')
     for i in range(len(vals)):
         d = __all_models.count_for_dron.QuanForDron()
         if vals[i][1] is None or vals[i][2] is None or vals[i][3] is None or type(vals[i][3]) != int:
