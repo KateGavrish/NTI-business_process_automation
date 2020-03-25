@@ -1,8 +1,8 @@
 import openpyxl
 
 
-def import_drons():
-    wb = openpyxl.load_workbook(filename = 'СписокДронов.xlsx')
+def import_drons(file_name):
+    wb = openpyxl.load_workbook(filename = file_name)
     sheet = wb['Лист1']
 
     vals = []
@@ -14,10 +14,10 @@ def import_drons():
         if val[0] == None and val[1] == None and val[2] == None:
             break
     vals = vals[1:]
-    print(*vals)
+    return vals
 
-def import_komplecktuyshye():
-    wb = openpyxl.load_workbook(filename='Комплектующие.xlsx')
+def import_komplecktuyshye(file_name):
+    wb = openpyxl.load_workbook(filename=file_name)
     sheet = wb['Лист1']
 
     vals = []
@@ -29,11 +29,11 @@ def import_komplecktuyshye():
         if val[0] == None and val[1] == None and val[2] == None:
             break
     vals = vals[1:]
-    print(*vals)
+    return vals
 
 
-def import_technial_map():
-    wb = openpyxl.load_workbook(filename='ТехнологическиеКарты.xlsx')
+def import_technial_map(file_name):
+    wb = openpyxl.load_workbook(filename=file_name)
     sheet = wb['Лист1']
 
     vals = []
@@ -45,4 +45,4 @@ def import_technial_map():
         if val[0] == None and val[1] == None and val[2] == None:
             break
     vals = vals[1:]
-    print(*vals)
+    return vals

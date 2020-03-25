@@ -1,8 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QComboBox
 from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel
 import sys
-
-
+from ecxel_example import *
 
 class UiMainWindow(QWidget):
     def __init__(self):
@@ -70,17 +69,26 @@ class UiMainWindow(QWidget):
 
     def open_path1(self):
         filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
-        print(filename)
+        try:
+            drons = import_drons(filename)
+        except:
+            pass
         self.lineEdit_drons.setText(filename)
 
     def open_path2(self):
         filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
-        print(filename)
+        try:
+            komplectuyshye = import_komplecktuyshye(filename)
+        except:
+            pass
         self.lineEdit_komplecktushie.setText(filename)
 
     def open_path3(self):
         filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
-        print(filename)
+        try:
+            technial_maps = import_technial_map(filename)
+        except:
+            pass
         self.lineEdit_technial_maps.setText(filename)
 
     def download(self):
@@ -91,6 +99,7 @@ class UiMainWindow(QWidget):
 
     def closing(self):
         UiMainWindow.close(self)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
