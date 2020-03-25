@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QComboBox
+from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QComboBox, QMessageBox
 from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel
 import sys
 from ecxel_example import *
@@ -68,15 +68,15 @@ class UiMainWindow(QWidget):
         self.technial_maps.move(10, 80)
 
     def open_path1(self):
-        filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
+        filename = QFileDialog.getOpenFileName(self, 'Open file', 'Таблицы(*.xlsx)')[0]
         self.lineEdit_drons.setText(filename)
 
     def open_path2(self):
-        filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
+        filename = QFileDialog.getOpenFileName(self, 'Open file', 'Таблицы(*.xlsx)')[0]
         self.lineEdit_komplecktushie.setText(filename)
 
     def open_path3(self):
-        filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
+        filename = QFileDialog.getOpenFileName(self, 'Open file', 'Таблицы(*.xlsx)')[0]
         self.lineEdit_technial_maps.setText(filename)
 
     def download(self):
@@ -84,17 +84,28 @@ class UiMainWindow(QWidget):
         filename2 = self.lineEdit_komplecktushie.text()
         filename3 = self.lineEdit_technial_maps.text()
         try:
-            drons = import_drons(filename1)
-        except:
-            pass
+            drons = load_list(filename1)
+        except Exception as e:
+            print(e)
+            msg = QMessageBox()
+            msg.setWindowTitle("Ошибка при импорте")
+            msg.setText(f"Не удалось загрузить {filename1}")
+            msg.exec()
+            result = msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         try:
-            komplectuyshye = import_komplecktuyshye(filename2)
+            komplectuyshye = load_compl(filename2)
         except:
-            pass
+            msg = QMessageBox()
+            msg.setWindowTitle("Ошибка при импорте")
+            msg.setText(f"Не удалось загрузить {filename2}")
+            result = msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         try:
-            technial_maps = import_technial_map(filename3)
+            technial_maps = load_quan(filename3)
         except:
-            pass
+            msg = QMessageBox()
+            msg.setWindowTitle("Ошибка при импорте")
+            msg.setText(f"Не удалось загрузить {filename3}")
+            result = msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
 
     def closing(self):
         UiMainWindow.close(self)

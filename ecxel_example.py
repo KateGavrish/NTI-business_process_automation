@@ -29,6 +29,7 @@ def load_compl(name):
         session = db_session.create_session()
         session.add(d)
         session.commit()
+    return 'ok'
 
 
 def load_list(name):
@@ -57,6 +58,7 @@ def load_list(name):
         session = db_session.create_session()
         session.add(d)
         session.commit()
+    return 'ok'
 
 
 def load_quan(name):
