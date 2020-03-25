@@ -6,5 +6,6 @@ def main():
     db_session.global_init("db/drons.sqlite")
 
 
+
 if __name__ == '__main__':
     main()
