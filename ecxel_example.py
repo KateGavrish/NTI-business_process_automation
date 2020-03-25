@@ -40,9 +40,9 @@ def import_technial_map(file_name):
     n = 0
     while True:
         n += 1
-        val = [sheet[f'A{n}'].value, sheet[f'B{n}'].value, sheet[f'C{n}'].value]
+        val = [sheet[f'A{n}'].value, sheet[f'B{n}'].value, sheet[f'C{n}'].value, sheet[f'D{n}'].value]
         vals.append(val)
-        if val[0] == None and val[1] == None and val[2] == None:
+        if val[0] == None and val[1] == None and val[2] == None and val[3] == None:
             break
     vals = vals[1:]
     return vals
