@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QComboBox
-from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel
+from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QMessageBox
 import sys
 from ecxel_example import *
 
@@ -76,25 +76,47 @@ class UiMainWindow(QWidget):
         self.lineEdit_komplecktushie.setText(filename)
 
     def open_path3(self):
-        filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
+        filename = QFileDialog.getOpenFileName(self, 'Open file', '.xlsx')[0]
         self.lineEdit_technial_maps.setText(filename)
 
     def download(self):
         filename1 = self.lineEdit_drons.text()
         filename2 = self.lineEdit_komplecktushie.text()
         filename3 = self.lineEdit_technial_maps.text()
+        message1 = ""
+        message2 = ""
+        message3 = ""
+        ok1 = True
+        ok2 = True
+        ok3 = True
         try:
             drons = import_drons(filename1)
+            message1 = "Загрузка информации о дронах прошла успешно"
         except:
-            pass
+            message1 = "При загрузке информации о дронах возникла ошибка"
+            ok1 = False
         try:
             komplectuyshye = import_komplecktuyshye(filename2)
+            message2 = "Загрузка информации о комплектующих прошла успешно"
         except:
-            pass
+            ok2 = False
+            message2 = "При загрузке информации о комплектующих возникла ошибка"
         try:
             technial_maps = import_technial_map(filename3)
+            message3 = "Загрузке информации о технических картах прошла успешно"
         except:
-            pass
+            ok3 = False
+            message3 = "При загрузке информации о технических картах возникла ошибка"
+        if ok1 and ok2 and ok3:
+            mes = "Загрузка прошла успешно"
+        else:
+            mes = "При загрузке произошли некоторые ошибки"
+        msg = QMessageBox()
+        msg.setWindowTitle("Информация")
+        msg.setText(mes)
+        msg.setInformativeText(f"{message1}\n{message2}\n{message3}")
+        result = msg.setStandardButtons(QMessageBox.Ok)
+        retval = msg.exec_()
 
     def closing(self):
         UiMainWindow.close(self)
