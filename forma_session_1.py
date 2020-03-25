@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QMessageBox
 import sys
 from ecxel_example import *
 
+
 class UiMainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -68,15 +69,15 @@ class UiMainWindow(QWidget):
         self.technial_maps.move(10, 80)
 
     def open_path1(self):
-        filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
+        filename = QFileDialog.getOpenFileName(self, 'Open file', None, "(*.xlsx)")[0]
         self.lineEdit_drons.setText(filename)
 
     def open_path2(self):
-        filename = QFileDialog.getOpenFileName(self, 'Open file')[0]
+        filename = QFileDialog.getOpenFileName(self, 'Open file', None, "(*.xlsx)")[0]
         self.lineEdit_komplecktushie.setText(filename)
 
     def open_path3(self):
-        filename = QFileDialog.getOpenFileName(self, 'Open file', '.xlsx')[0]
+        filename = QFileDialog.getOpenFileName(self, 'Open file', None, "(*.xlsx)")[0]
         self.lineEdit_technial_maps.setText(filename)
 
     def download(self):
