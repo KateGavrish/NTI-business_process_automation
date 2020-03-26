@@ -4,18 +4,21 @@ import sys
 from ecxel_example import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 import datetime
+from PyQt5 import QtCore
 
 
 class UiMainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.size_table = 0
 
 
     def initUI(self):
         self.setGeometry(200, 200, 720, 600)
         self.setWindowTitle("Session2")
         self.number = 1
+        self.date = 2
 
         self.pushButton_ok = QPushButton("Ok", self)
         self.pushButton_ok.resize(100, 50)
@@ -62,6 +65,27 @@ class UiMainWindow(QWidget):
 
     def closing(self):
         UiMainWindow.close(self)
+
+    def update_table(self, spisok):
+        # список состоит из списков,  вот так:
+        # [["комплектющее", "серийный номер", "количество"], ["комплектющее", "серийный номер", "количество"]]
+        self.tableWidget_komplectuyshie.setRowCount(len(spisok))
+        for i in range(len(spisok)):
+            for j in range(3):
+                itm = QTableWidgetItem(str(spisok[i][j]))
+                #itm.setFlags(QtCore.Qt.ItemIsEnabled)
+                self.tableWidget_komplectuyshie.setItem(i, j, itm)
+        self.tableWidget_komplectuyshie.resizeColumnsToContents()
+        self.size_table = len(spisok)
+
+    def read_table(self):
+        # эта функция возвращает данные таблицы
+        # список состоит из списков,  вот так:
+        # [["комплектющее", "серийный номер", "количество"], ["комплектющее", "серийный номер", "количество"]]
+        info_table = []
+        for i in range(self.size_table):
+            info_table.append([self.tableWidget_komplectuyshie.item(i, j).text() for j in range(3)])
+        return info_table
 
 
 if __name__ == '__main__':
