@@ -13,6 +13,7 @@ class UiMainWindow(QWidget):
         super().__init__()
         self.initUI()
         self.size_table = 10
+        self.last_table_update = []
 
 
     def initUI(self):
@@ -106,7 +107,15 @@ class UiMainWindow(QWidget):
         self.size_table += 1
 
     def closing(self):
-        UiMainWindow.close(self)
+        if self.last_table_update == self.read_table():
+            UiMainWindow.close(self)
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Информация")
+            msg.setText("Есть несохранённые изменения")
+            # msg.setInformativeText(f"{message1}\n{message2}\n{message3}")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
 
     def update_table(self, spisok):
         # список состоит из списков,  вот так:
@@ -115,10 +124,13 @@ class UiMainWindow(QWidget):
         for i in range(len(spisok)):
             for j in range(3):
                 itm = QTableWidgetItem(str(spisok[i][j]))
-
-                #itm.setFlags(QtCore.Qt.ItemIsEnabled)
-
-                self.tableWidget_komplectuyshie.setItem(i, j, itm)
+                if j == 1 and ("АКБ" in str(spisok[i][0]) or "акб" in str(spisok[i][0]) or "Акб" in str(spisok[i][0])):
+                    itm = QTableWidgetItem(str(spisok[i][j]))
+                    self.tableWidget_komplectuyshie.setItem(i, j, itm)
+                else:
+                    itm = QTableWidgetItem(str(''))
+                    itm.setFlags(QtCore.Qt.ItemIsEnabled)
+                    self.tableWidget_komplectuyshie.setItem(i, j, itm)
         self.tableWidget_komplectuyshie.resizeColumnsToContents()
         self.size_table = len(spisok)
 
