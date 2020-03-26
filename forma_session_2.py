@@ -12,6 +12,7 @@ class UiMainWindow(QWidget):
         super().__init__()
         self.initUI()
         self.size_table = 0
+        self.last_table_update = []
 
 
     def initUI(self):
@@ -64,7 +65,15 @@ class UiMainWindow(QWidget):
         pass
 
     def closing(self):
-        UiMainWindow.close(self)
+        if self.last_table_update == self.read_table():
+            UiMainWindow.close(self)
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Информация")
+            msg.setText("Есть несохранённые изменения")
+            # msg.setInformativeText(f"{message1}\n{message2}\n{message3}")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
 
     def update_table(self, spisok):
         # список состоит из списков,  вот так:
