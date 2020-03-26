@@ -48,9 +48,9 @@ class Ui_Session3(object):
         self.run = QtWidgets.QPushButton(self.centralwidget)
         self.run.setGeometry(QtCore.QRect(30, 510, 151, 51))
         self.run.setObjectName("run")
-        self.close = QtWidgets.QPushButton(self.centralwidget)
-        self.close.setGeometry(QtCore.QRect(180, 510, 141, 51))
-        self.close.setObjectName("close")
+        self.close_ = QtWidgets.QPushButton(self.centralwidget)
+        self.close_.setGeometry(QtCore.QRect(180, 510, 141, 51))
+        self.close_.setObjectName("close")
         self.print_d = QtWidgets.QPushButton(self.centralwidget)
         self.print_d.setGeometry(QtCore.QRect(650, 510, 121, 51))
         self.print_d.setObjectName("print_d")
@@ -68,7 +68,7 @@ class Ui_Session3(object):
         self.label.setText(_translate("Session3", "Остатки комплектующих"))
         self.label_2.setText(_translate("Session3", "Показывать остатки на:"))
         self.run.setText(_translate("Session3", "Выполнить"))
-        self.close.setText(_translate("Session3", "Закрыть"))
+        self.close_.setText(_translate("Session3", "Закрыть"))
         self.print_d.setText(_translate("Session3", "Печать"))
 
 
@@ -80,8 +80,10 @@ class Session3(QMainWindow, Ui_Session3):
         self.size_table = 0
 
         self.run.clicked.connect(self.info_output)
-        self.close.clicked.connect(self.close_win)
+        self.close_.clicked.connect(self.close_win)
         self.print_d.clicked.connect(self.print_document)
+
+        self.info_output()
 
     def balance_calculation(self):
         """Подсчет остатков"""
@@ -133,7 +135,7 @@ class Session3(QMainWindow, Ui_Session3):
 
     def close_win(self):
         """Закрытие программы"""
-        MainWindow.close()
+        self.close()
 
     def read_table(self):
         """ эта функция возвращает данные таблицы
@@ -151,11 +153,13 @@ class Session3(QMainWindow, Ui_Session3):
     def print_document(self):
         """Печать документа"""
         list_of_balances = self.read_table()
-        make_xlsx_table(QFileDialog.getSaveFileName(self, 'Open file', None, "(*.xlsx)")[0], list_of_balances)
+        path_to_file = QFileDialog.getSaveFileName(self, 'Open file', None, "(*.xlsx)")[0]
+        if path_to_file:
+            make_xlsx_table(path_to_file, list_of_balances)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    MainWindow = Session3()
-    MainWindow.show()
+    MainWin = Session3()
+    MainWin.show()
     sys.exit(app.exec())
