@@ -12,7 +12,7 @@ class UiMainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.size_table = 0
+        self.size_table = 10
 
 
     def initUI(self):
@@ -90,9 +90,17 @@ class UiMainWindow(QWidget):
         pass
 
     def add_stroka(self):
+        combo_box_options = []
+        db_session.global_init('sql/db/drons1.sqlite')
+        session = db_session.create_session()
+        for user in session.query(details.DetailCategory):
+            combo_box_options.append(user.name_det)
         self.tableWidget_komplectuyshie.setRowCount(self.size_table + 1)
         itm = QTableWidgetItem(str(''))
-        self.tableWidget_komplectuyshie.setItem(self.size_table, 0, itm)
+        combo = QComboBox()
+        for t in combo_box_options:
+            combo.addItem(t)
+        self.tableWidget_komplectuyshie.setCellWidget(self.size_table, 0, combo)
         self.tableWidget_komplectuyshie.setItem(self.size_table, 1, itm)
         self.tableWidget_komplectuyshie.setItem(self.size_table, 2, itm)
         self.size_table += 1
@@ -107,7 +115,9 @@ class UiMainWindow(QWidget):
         for i in range(len(spisok)):
             for j in range(3):
                 itm = QTableWidgetItem(str(spisok[i][j]))
+
                 #itm.setFlags(QtCore.Qt.ItemIsEnabled)
+
                 self.tableWidget_komplectuyshie.setItem(i, j, itm)
         self.tableWidget_komplectuyshie.resizeColumnsToContents()
         self.size_table = len(spisok)
