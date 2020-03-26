@@ -4,8 +4,7 @@ import sys
 from ecxel_example import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 import datetime
-from ecxel_example import *
-from sql.data.__all_models import *
+from PyQt5 import QtCore
 
 
 class UiMainWindow(QWidget):
@@ -13,7 +12,7 @@ class UiMainWindow(QWidget):
         super().__init__()
         self.initUI()
         self.size_table = 0
-        self.index = 0
+
 
     def initUI(self):
         self.setGeometry(200, 200, 720, 600)
@@ -29,17 +28,12 @@ class UiMainWindow(QWidget):
         self.pushButton_download = QPushButton("Записать", self)
         self.pushButton_download.resize(100, 50)
         self.pushButton_download.move(130, 520)
-        self.pushButton_download.clicked.connect(self.update_table)
+        self.pushButton_download.clicked.connect(self.write)
 
         self.pushButton_open_file2 = QPushButton("Закрыть", self)
         self.pushButton_open_file2.resize(100, 50)
         self.pushButton_open_file2.move(250, 520)
         self.pushButton_open_file2.clicked.connect(self.closing)
-
-        self.pushButton_open_file2 = QPushButton("Добавить строку", self)
-        self.pushButton_open_file2.resize(100, 50)
-        self.pushButton_open_file2.move(370, 520)
-        self.pushButton_open_file2.clicked.connect(self.upload)
 
         self.lineEdit_otvetstv = QLineEdit('', self)
         self.lineEdit_otvetstv.setPlaceholderText("")
@@ -62,24 +56,6 @@ class UiMainWindow(QWidget):
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(0, QTableWidgetItem('Комплектующее'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(1, QTableWidgetItem('Серийный номер'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(2, QTableWidgetItem('Количество'))
-
-    def upload(self):
-        db_session.global_init('sql/db/drons1.sqlite')
-        session = db_session.create_session()
-        combo_box_options = []
-        for user in session.query(details.DetailCategory):
-            combo_box_options.append(user.name_det)
-        self.tableWidget_komplectuyshie.setRowCount(1)
-        item1 = QTableWidgetItem('')
-        self.tableWidget_komplectuyshie.setItem(self.index, 1, item1)
-        item2 = QTableWidgetItem('')
-        self.tableWidget_komplectuyshie.setItem(self.index, 2, item2)
-        combo = QComboBox()
-        for t in combo_box_options:
-            combo.addItem(t)
-        self.tableWidget_komplectuyshie.setCellWidget(self.index, 0, combo)
-        self.index += 1
-
 
     def ok(self):
         pass
