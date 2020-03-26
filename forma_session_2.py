@@ -6,10 +6,12 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 import datetime
 from PyQt5 import QtCore
 
+
 class UiMainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+        self.size_table = 0
 
 
     def initUI(self):
@@ -54,7 +56,6 @@ class UiMainWindow(QWidget):
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(0, QTableWidgetItem('Комплектующее'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(1, QTableWidgetItem('Серийный номер'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(2, QTableWidgetItem('Количество'))
-        self.update_table(["fgfdg", "dfgf", "FDg"])
 
     def ok(self):
         pass
@@ -75,6 +76,16 @@ class UiMainWindow(QWidget):
                 #itm.setFlags(QtCore.Qt.ItemIsEnabled)
                 self.tableWidget_komplectuyshie.setItem(i, j, itm)
         self.tableWidget_komplectuyshie.resizeColumnsToContents()
+        self.size_table = len(spisok)
+
+    def read_table(self):
+        # эта функция возвращает данные таблицы
+        # список состоит из списков,  вот так:
+        # [["комплектющее", "серийный номер", "количество"], ["комплектющее", "серийный номер", "количество"]]
+        info_table = []
+        for i in range(self.size_table):
+            info_table.append([self.tableWidget_komplectuyshie.item(i, j).text() for j in range(3)])
+        return info_table
 
 
 if __name__ == '__main__':
