@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 import datetime
 from PyQt5 import QtCore
 from sql.data.__all_models import *
+from make_xlsx_session_3 import *
 
 
 class Ui_Session3(object):
@@ -76,6 +77,8 @@ class Session3(QMainWindow, Ui_Session3):
         super().__init__()
         self.setupUi(self)
 
+        self.size_table = 0
+
         self.run.clicked.connect(self.info_output)
         self.close.clicked.connect(self.close_win)
         self.print_d.clicked.connect(self.print_document)
@@ -93,7 +96,6 @@ class Session3(QMainWindow, Ui_Session3):
             else:
                 complect_with_balance[user.name_det] += int(user.quantity)
         for user in session.query(balance.Balance).filter(balance.Balance.date <= date):
-            print(user.date, date)
             if user.name_det not in complect_with_balance:
                 complect_with_balance[user.name_det] = int(user.quantity)
             else:
@@ -106,6 +108,7 @@ class Session3(QMainWindow, Ui_Session3):
         complect_with_balance = self.balance_calculation()
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setRowCount(len(complect_with_balance))
+        self.size_table = len(complect_with_balance)
         self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem('Номер'))
         self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem('Комплектующее'))
         self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem('Остаток'))
@@ -132,9 +135,23 @@ class Session3(QMainWindow, Ui_Session3):
         """Закрытие программы"""
         MainWindow.close()
 
+    def read_table(self):
+        """ эта функция возвращает данные таблицы
+            список состоит из списков,  вот так:
+            [["комплектющее", "серийный номер", "количество"]]"""
+
+        info_table = []
+        for i in range(self.size_table):
+            a = []
+            for j in range(3):
+                a.append(self.tableWidget.item(i, j).text())
+            info_table.append(a)
+        return info_table
+
     def print_document(self):
         """Печать документа"""
-        pass
+        list_of_balances = self.read_table()
+        make_xlsx_table(QFileDialog.getSaveFileName(self, 'Open file', None, "(*.xlsx)")[0], list_of_balances)
 
 
 if __name__ == '__main__':

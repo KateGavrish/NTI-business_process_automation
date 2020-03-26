@@ -12,7 +12,7 @@ def make_xlsx_table(filename, spisok):
           for index in range(3):
               value = spisok[num - 1][index]
               row.write(index, value)
-    book.save(f"{filename}.xlsx")
+    book.save(filename)
 
 
 # вот например: make_xlsx_table("lol", [[1, 2, 3], [4, 5, 6]])
