@@ -85,26 +85,23 @@ class UiMainWindow(QWidget):
         filename2 = self.lineEdit_komplecktushie.text()
         filename3 = self.lineEdit_technial_maps.text()
         if filename1 and filename2 and filename3:
-            message1 = ""
-            message2 = ""
-            message3 = ""
             ok1 = True
             ok2 = True
             ok3 = True
             try:
-                drons = import_drons(filename1)
+                import_drons(filename1)
                 message1 = "Загрузка информации о дронах прошла успешно"
             except:
                 message1 = "При загрузке информации о дронах возникла ошибка"
                 ok1 = False
             try:
-                komplectuyshye = import_komplecktuyshye(filename2)
+                import_details(filename2)
                 message2 = "Загрузка информации о комплектующих прошла успешно"
             except:
                 ok2 = False
                 message2 = "При загрузке информации о комплектующих возникла ошибка"
             try:
-                technial_maps = import_technial_map(filename3)
+                import_technial_map(filename3)
                 message3 = "Загрузке информации о технических картах прошла успешно"
             except:
                 ok3 = False
@@ -117,15 +114,15 @@ class UiMainWindow(QWidget):
             msg.setWindowTitle("Информация")
             msg.setText(mes)
             msg.setInformativeText(f"{message1}\n{message2}\n{message3}")
-            result = msg.setStandardButtons(QMessageBox.Ok)
-            retval = msg.exec_()
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
         else:
             msg = QMessageBox()
             msg.setWindowTitle("Информация")
             msg.setText("Вы выбрали не все файлы")
             msg.setInformativeText(f"Поэтому не произведена загрузка")
-            result = msg.setStandardButtons(QMessageBox.Ok)
-            retval = msg.exec_()
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
 
     def closing(self):
         UiMainWindow.close(self)

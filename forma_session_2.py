@@ -2,8 +2,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QComboBox
 from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QMessageBox
 import sys
 from ecxel_example import *
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QCheckBox
-from PyQt5 import QtCore
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
 
 class UiMainWindow(QWidget):
@@ -63,17 +62,6 @@ class UiMainWindow(QWidget):
 
     def closing(self):
         UiMainWindow.close(self)
-
-    def update_table(self, spisok):
-        # список состоит из списков,  вот так:
-        # [["комплектющее", "серийный номер", "количество"], ["комплектющее", "серийный номер", "количество"]]
-        self.tableWidget_komplectuyshie.setRowCount(len(spisok))
-        for i in range(len(spisok)):
-            for j in range(3):
-                itm = QTableWidgetItem(str(spisok[i][j]))
-                itm.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.tableWidget_komplectuyshie.setItem(i, j, itm)
-        self.tableWidget_komplectuyshie.resizeColumnsToContents()
 
 
 if __name__ == '__main__':
