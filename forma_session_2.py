@@ -5,6 +5,7 @@ from ecxel_example import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 import datetime
 from PyQt5 import QtCore
+from sql.data.__all_models import *
 
 
 class UiMainWindow(QWidget):
@@ -61,6 +62,26 @@ class UiMainWindow(QWidget):
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(0, QTableWidgetItem('Комплектующее'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(1, QTableWidgetItem('Серийный номер'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(2, QTableWidgetItem('Количество'))
+
+        self.upload()
+
+    def upload(self):
+        combo_box_options = []
+        db_session.global_init('sql/db/drons1.sqlite')
+        session = db_session.create_session()
+        for user in session.query(details.DetailCategory):
+            combo_box_options.append(user.name_det)
+        self.tableWidget_komplectuyshie.setRowCount(10)
+
+        for index in range(10):
+            item1 = QTableWidgetItem('')
+            self.tableWidget_komplectuyshie.setItem(index, 1, item1)
+            item2 = QTableWidgetItem('')
+            self.tableWidget_komplectuyshie.setItem(index, 2, item2)
+            combo = QComboBox()
+            for t in combo_box_options:
+                combo.addItem(t)
+            self.tableWidget_komplectuyshie.setCellWidget(index, 0, combo)
 
     def ok(self):
         pass
