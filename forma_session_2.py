@@ -85,8 +85,10 @@ class UiMainWindow(QWidget):
             msg.setWindowTitle("Информация")
             msg.setText("Есть несохранённые изменения")
             # msg.setInformativeText(f"{message1}\n{message2}\n{message3}")
-            msg.setStandardButtons(QMessageBox.Ok)
-            msg.exec_()
+            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+            retval = msg.exec_()
+            if retval == QMessageBox.Ok:
+                UiMainWindow.close(self)
 
     def update_table(self, spisok):
         # список состоит из списков,  вот так:
@@ -111,7 +113,10 @@ class UiMainWindow(QWidget):
         # [["комплектющее", "серийный номер", "количество"], ["комплектющее", "серийный номер", "количество"]]
         info_table = []
         for i in range(self.size_table):
-            info_table.append([self.tableWidget_komplectuyshie.item(i, j).text() for j in range(3)])
+            try:
+                info_table.append([self.tableWidget_komplectuyshie.item(i, j).text() for j in range(3)])
+            except:
+                info_table.append(['', '', ''])
         return info_table
 
 
