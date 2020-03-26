@@ -74,8 +74,12 @@ class UiMainWindow(QWidget):
             for j in range(3):
                 itm = QTableWidgetItem(str(spisok[i][j]))
                 if j == 1 and ("АКБ" in str(spisok[i][0]) or "акб" in str(spisok[i][0]) or "Акб" in str(spisok[i][0])):
+                    itm = QTableWidgetItem(str(spisok[i][j]))
+                    self.tableWidget_komplectuyshie.setItem(i, j, itm)
+                else:
+                    itm = QTableWidgetItem(str(''))
                     itm.setFlags(QtCore.Qt.ItemIsEnabled)
-                self.tableWidget_komplectuyshie.setItem(i, j, itm)
+                    self.tableWidget_komplectuyshie.setItem(i, j, itm)
         self.tableWidget_komplectuyshie.resizeColumnsToContents()
         self.size_table = len(spisok)
 
