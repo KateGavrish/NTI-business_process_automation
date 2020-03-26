@@ -140,7 +140,13 @@ class UiMainWindow(QWidget):
         # [["комплектющее", "серийный номер", "количество"], ["комплектющее", "серийный номер", "количество"]]
         info_table = []
         for i in range(self.size_table):
-            info_table.append([self.tableWidget_komplectuyshie.item(i, j).text() for j in range(3)])
+            a = []
+            for j in range(3):
+                if j != 0:
+                    a.append(self.tableWidget_komplectuyshie.item(i, j).text())
+                else:
+                    a.append(self.tableWidget_komplectuyshie.cellWidget(i, j).currentText())
+            info_table.append(a)
         return info_table
 
 
