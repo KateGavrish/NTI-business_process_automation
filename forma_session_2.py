@@ -20,6 +20,11 @@ class UiMainWindow(QWidget):
         self.number = 1
         self.date = 2
 
+        self.pushButton_add = QPushButton("+", self)
+        self.pushButton_add.resize(50, 50)
+        self.pushButton_add.move(660, 500)
+        self.pushButton_add.clicked.connect(self.add_stroka)
+
         self.pushButton_ok = QPushButton("Ok", self)
         self.pushButton_ok.resize(100, 50)
         self.pushButton_ok.move(10, 520)
@@ -62,6 +67,14 @@ class UiMainWindow(QWidget):
 
     def write(self):
         pass
+
+    def add_stroka(self):
+        self.tableWidget_komplectuyshie.setRowCount(self.size_table + 1)
+        itm = QTableWidgetItem(str(''))
+        self.tableWidget_komplectuyshie.setItem(self.size_table, 0, itm)
+        self.tableWidget_komplectuyshie.setItem(self.size_table, 1, itm)
+        self.tableWidget_komplectuyshie.setItem(self.size_table, 2, itm)
+        self.size_table += 1
 
     def closing(self):
         UiMainWindow.close(self)
