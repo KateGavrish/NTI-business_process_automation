@@ -85,7 +85,7 @@ class Session3(QMainWindow, Ui_Session3):
 
     def balance_calculation(self):
         """Подсчет остатков"""
-        date = self.dateEdit.date().currentDate().toPyDate()
+        date = datetime.date(*self.dateEdit.date().getDate())
         complect_with_balance = dict()
         db_session.global_init('sql/db/drons1.sqlite')
 
