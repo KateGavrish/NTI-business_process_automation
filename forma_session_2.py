@@ -91,8 +91,6 @@ class UiMainWindow(QWidget):
         db_session.global_init('sql/db/drons1.sqlite')
         for i in range(len(a)):
             d = receipt_of_components.ReceiptOfComponents()
-            if type(a[i][2]) != int:
-                continue
             d.name_det = a[i][0]
             d.serial_number = a[i][1]
             d.quantity = a[i][2]
