@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form>
+    <table>
+        <tr>
+            <th>Номенклатура</th>
+            <th>Остаток по данным БД</th>
+            <th>Фактическое количество</th>
+        </tr>
+        {% for item in params['list_of_sub'] %}
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+            <td><input type="text"></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p>
+        <input type="submit" value="Записать">
+        <input type="reset" value="Очистить">
+    </p>
+</form>
+{% endblock %}
