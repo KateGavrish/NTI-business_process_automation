@@ -90,7 +90,12 @@ class UiMainWindow(QWidget):
         a = self.read_table()
         db_session.global_init('sql/db/drons1.sqlite')
         for i in range(len(a)):
+            print(a)
             d = receipt_of_components.ReceiptOfComponents()
+            b = balance.Balance()
+            b.name_det = a[i][0]
+            b.quantity = int(a[i][2])
+            b.date = datetime.datetime.today()
             d.name_det = a[i][0]
             d.serial_number = a[i][1]
             d.quantity = a[i][2]
@@ -98,6 +103,7 @@ class UiMainWindow(QWidget):
             d.date = datetime.datetime.today()
             session = db_session.create_session()
             session.add(d)
+            session.add(b)
             session.commit()
 
     def add_stroka(self):
@@ -114,7 +120,6 @@ class UiMainWindow(QWidget):
         self.tableWidget_komplectuyshie.setCellWidget(self.size_table, 0, combo)
         self.tableWidget_komplectuyshie.setItem(self.size_table, 1, itm)
         itm1 = QTableWidgetItem(str(''))
-        itm1.setFlags(QtCore.Qt.ItemIsEnabled)
         self.tableWidget_komplectuyshie.setItem(self.size_table, 2, itm1)
         self.size_table += 1
         self.tableWidget_komplectuyshie.resizeColumnsToContents()
@@ -146,7 +151,6 @@ class UiMainWindow(QWidget):
                     a.append(self.tableWidget_komplectuyshie.cellWidget(i, j).currentText())
             info_table.append(a)
         return info_table
-
 
 
 if __name__ == '__main__':
