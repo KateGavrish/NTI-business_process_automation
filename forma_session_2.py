@@ -3,7 +3,8 @@ from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QMessageBox
 import sys
 from ecxel_example import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
-
+import datetime
+from PyQt5 import QtCore
 
 class UiMainWindow(QWidget):
     def __init__(self):
@@ -25,7 +26,7 @@ class UiMainWindow(QWidget):
         self.pushButton_download = QPushButton("Записать", self)
         self.pushButton_download.resize(100, 50)
         self.pushButton_download.move(130, 520)
-        self.pushButton_download.clicked.connect(self.zapisat)
+        self.pushButton_download.clicked.connect(self.write)
 
         self.pushButton_open_file2 = QPushButton("Закрыть", self)
         self.pushButton_open_file2.resize(100, 50)
@@ -39,7 +40,7 @@ class UiMainWindow(QWidget):
         self.lineEdit_otvetstv.setObjectName("lineEdit")
 
         self.drons = QLabel(self)
-        self.drons.setText(f"Поступление комплектующих {self.number} от {self.date}")
+        self.drons.setText(f"Поступление комплектующих № 000{self.number} от {datetime.datetime.today().strftime('%d.%m.%Y')}")
         self.drons.move(10, 20)
 
         self.komplecktushie = QLabel(self)
@@ -53,15 +54,27 @@ class UiMainWindow(QWidget):
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(0, QTableWidgetItem('Комплектующее'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(1, QTableWidgetItem('Серийный номер'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(2, QTableWidgetItem('Количество'))
+        self.update_table(["fgfdg", "dfgf", "FDg"])
 
     def ok(self):
         pass
 
-    def zapisat(self):
+    def write(self):
         pass
 
     def closing(self):
         UiMainWindow.close(self)
+
+    def update_table(self, spisok):
+        # список состоит из списков,  вот так:
+        # [["комплектющее", "серийный номер", "количество"], ["комплектющее", "серийный номер", "количество"]]
+        self.tableWidget_komplectuyshie.setRowCount(len(spisok))
+        for i in range(len(spisok)):
+            for j in range(3):
+                itm = QTableWidgetItem(str(spisok[i][j]))
+                #itm.setFlags(QtCore.Qt.ItemIsEnabled)
+                self.tableWidget_komplectuyshie.setItem(i, j, itm)
+        self.tableWidget_komplectuyshie.resizeColumnsToContents()
 
 
 if __name__ == '__main__':
