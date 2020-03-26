@@ -12,7 +12,7 @@ class UiMainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        self.size_table = 10
+        self.size_table = 1
         self.last_table_update = []
 
 
@@ -21,6 +21,7 @@ class UiMainWindow(QWidget):
         self.setWindowTitle("Session2")
         self.number = 1
         self.date = 2
+        self.size_table = 10
 
         self.pushButton_add = QPushButton("+", self)
         self.pushButton_add.resize(50, 50)
@@ -63,7 +64,6 @@ class UiMainWindow(QWidget):
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(0, QTableWidgetItem('Комплектующее'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(1, QTableWidgetItem('Серийный номер'))
         self.tableWidget_komplectuyshie.setHorizontalHeaderItem(2, QTableWidgetItem('Количество'))
-
         self.upload()
 
     def upload(self):
@@ -72,23 +72,35 @@ class UiMainWindow(QWidget):
         session = db_session.create_session()
         for user in session.query(details.DetailCategory):
             combo_box_options.append(user.name_det)
-        self.tableWidget_komplectuyshie.setRowCount(10)
+        self.tableWidget_komplectuyshie.setRowCount(1)
 
-        for index in range(10):
-            item1 = QTableWidgetItem('')
-            self.tableWidget_komplectuyshie.setItem(index, 1, item1)
-            item2 = QTableWidgetItem('')
-            self.tableWidget_komplectuyshie.setItem(index, 2, item2)
-            combo = QComboBox()
-            for t in combo_box_options:
-                combo.addItem(t)
-            self.tableWidget_komplectuyshie.setCellWidget(index, 0, combo)
+        item1 = QTableWidgetItem('')
+        self.tableWidget_komplectuyshie.setItem(0, 1, item1)
+        item2 = QTableWidgetItem('')
+        self.tableWidget_komplectuyshie.setItem(0, 2, item2)
+        combo = QComboBox()
+        for t in combo_box_options:
+            combo.addItem(t)
+        self.tableWidget_komplectuyshie.setCellWidget(0, 0, combo)
 
     def ok(self):
         pass
 
     def write(self):
-        pass
+        a = self.read_table()
+        db_session.global_init('sql/db/drons1.sqlite')
+        for i in range(len(a)):
+            d = receipt_of_components.ReceiptOfComponents()
+            if type(a[i][2]) != int:
+                continue
+            d.name_det = a[i][0]
+            d.serial_number = a[i][1]
+            d.quantity = a[i][2]
+            d.person = self.lineEdit_otvetstv.text()
+            d.date = datetime.datetime.today()
+            session = db_session.create_session()
+            session.add(d)
+            session.commit()
 
     def add_stroka(self):
         combo_box_options = []
@@ -103,8 +115,11 @@ class UiMainWindow(QWidget):
             combo.addItem(t)
         self.tableWidget_komplectuyshie.setCellWidget(self.size_table, 0, combo)
         self.tableWidget_komplectuyshie.setItem(self.size_table, 1, itm)
-        self.tableWidget_komplectuyshie.setItem(self.size_table, 2, itm)
+        itm1 = QTableWidgetItem(str(''))
+        itm1.setFlags(QtCore.Qt.ItemIsEnabled)
+        self.tableWidget_komplectuyshie.setItem(self.size_table, 2, itm1)
         self.size_table += 1
+        self.tableWidget_komplectuyshie.resizeColumnsToContents()
 
     def closing(self):
         if self.last_table_update == self.read_table():
@@ -118,23 +133,6 @@ class UiMainWindow(QWidget):
             retval = msg.exec_()
             if retval == QMessageBox.Ok:
                 UiMainWindow.close(self)
-
-    def update_table(self, spisok):
-        # список состоит из списков,  вот так:
-        # [["комплектющее", "серийный номер", "количество"], ["комплектющее", "серийный номер", "количество"]]
-        self.tableWidget_komplectuyshie.setRowCount(len(spisok))
-        for i in range(len(spisok)):
-            for j in range(3):
-                itm = QTableWidgetItem(str(spisok[i][j]))
-                if j == 1 and ("АКБ" in str(spisok[i][0]) or "акб" in str(spisok[i][0]) or "Акб" in str(spisok[i][0])):
-                    itm = QTableWidgetItem(str(spisok[i][j]))
-                    self.tableWidget_komplectuyshie.setItem(i, j, itm)
-                else:
-                    itm = QTableWidgetItem(str(''))
-                    itm.setFlags(QtCore.Qt.ItemIsEnabled)
-                    self.tableWidget_komplectuyshie.setItem(i, j, itm)
-        self.tableWidget_komplectuyshie.resizeColumnsToContents()
-        self.size_table = len(spisok)
 
     def read_table(self):
         # эта функция возвращает данные таблицы
@@ -150,6 +148,7 @@ class UiMainWindow(QWidget):
                     a.append(self.tableWidget_komplectuyshie.cellWidget(i, j).currentText())
             info_table.append(a)
         return info_table
+
 
 
 if __name__ == '__main__':
