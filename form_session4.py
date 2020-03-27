@@ -221,36 +221,29 @@ class Session4(QMainWindow, Ui_MainWindow):
 
     def parameters(self, num_of_req):
         self.num_of_req = num_of_req
-        self.tableWidget.clear()
-        self.tableWidget.setColumnCount(2)
 
-        combo_box_options = []
+        self.tableWidget.setColumnCount(2)
+        self.tableWidget.setRowCount(1)
+
+        self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem('Дрон'))
+        self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem('Количество'))
+
+        self.add_string()
+
+        combo_box_options = ['Создана', 'Идет сборка', 'Готова к отгрузке',
+                             'Запрошено разрешение у ФСБ', 'Аннулирована', 'Отгружена']
+        for t in combo_box_options:
+            self.state.addItem(t)
+
         db_session.global_init('sql/db/drons1.sqlite')
         session = db_session.create_session()
-        for user in session.query(details.DetailCategory):
-            combo_box_options.append(user.name_det)
+        a = []
+        score = dict()
+        for user in session.query(drons_cost.DronCost):
+            score[user.name_dron] = user.cost
+        for user in session.query(request_4.DronsToReq).filter(request_4.DronsToReq.num == self.num_of_req):
+            a.append([user.dron_name, user.quantity])
 
-        # self.tableWidget.setRowCount(len(complect_with_balance))
-        # self.size_table = len(complect_with_balance)
-        # self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem('Номер'))
-        # self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem('Комплектующее'))
-        # self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem('Остаток'))
-        # i = 1
-        # for item in complect_with_balance.keys():
-        #     itm = QTableWidgetItem(f'{i}')
-        #     itm.setFlags(QtCore.Qt.ItemIsEnabled)
-        #
-        #     itm1 = QTableWidgetItem(item)
-        #     itm1.setFlags(QtCore.Qt.ItemIsEnabled)
-        #
-        #     itm2 = QTableWidgetItem(str(complect_with_balance[item]))
-        #     itm2.setFlags(QtCore.Qt.ItemIsEnabled)
-        #
-        #     self.tableWidget.setItem(i - 1, 0, itm)
-        #     self.tableWidget.setItem(i - 1, 1, itm1)
-        #     self.tableWidget.setItem(i - 1, 2, itm2)
-        #
-        #     i += 1
 
         self.tableWidget.resizeColumnsToContents()
 
