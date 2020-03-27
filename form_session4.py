@@ -74,6 +74,7 @@ class Ui_MainWindow(object):
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
         self.tableWidget.setRowCount(0)
+
         self.num_of_request = QtWidgets.QLineEdit(self.centralwidget)
         self.num_of_request.setGeometry(QtCore.QRect(172, 70, 201, 21))
         self.num_of_request.setObjectName("num_of_request")
@@ -340,6 +341,47 @@ class ListW(QMainWindow, Ui_ListWin):
 
     def selection(self):
         self.s = self.comboBox.currentText()
+        self.tableWidget.setColumnCount(5)
+
+        self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem('N п.п.'))
+        self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem('Дата создания'))
+        self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem('Дата изменения состояния'))
+        self.tableWidget.setHorizontalHeaderItem(3, QTableWidgetItem('Состояние'))
+        self.tableWidget.setHorizontalHeaderItem(4, QTableWidgetItem('Общая сумма заявки'))
+
+        db_session.global_init('sql/db/drons1.sqlite')
+        session = db_session.create_session()
+        a = []
+        for user in session.query(request_4.RequestDron).filter(request_4.RequestDron.number == int(self.s.split('  -   ')[0])):
+            a.append([int(user.id), str(user.date_create), str(user.date_close), user.buyer, user.state])
+        a.sort(key=lambda x: x[0])
+        self.tableWidget.setRowCount(len(a))
+        i = 1
+        for x in a:
+            itm = QTableWidgetItem(f'000{i}')
+            itm.setFlags(QtCore.Qt.ItemIsEnabled)
+
+            itm1 = QTableWidgetItem(x[1])
+            itm1.setFlags(QtCore.Qt.ItemIsEnabled)
+
+            itm2 = QTableWidgetItem(x[2])
+            itm2.setFlags(QtCore.Qt.ItemIsEnabled)
+
+            itm3 = QTableWidgetItem(x[3])
+            itm3.setFlags(QtCore.Qt.ItemIsEnabled)
+
+            itm4 = QTableWidgetItem(x[4])
+            itm4.setFlags(QtCore.Qt.ItemIsEnabled)
+
+            self.tableWidget.setItem(i - 1, 0, itm)
+            self.tableWidget.setItem(i - 1, 1, itm1)
+            self.tableWidget.setItem(i - 1, 2, itm2)
+            self.tableWidget.setItem(i - 1, 3, itm3)
+            self.tableWidget.setItem(i - 1, 4, itm4)
+
+            i += 1
+
+        self.tableWidget.resizeColumnsToContents()
 
     def create_new_request(self):
         MainWin.show()
