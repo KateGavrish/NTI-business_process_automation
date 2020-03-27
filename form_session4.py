@@ -242,7 +242,6 @@ class Session4(QMainWindow, Ui_MainWindow):
             score[user.name_dron] = user.cost
         for user in session.query(request_4.DronsToReq).filter(request_4.DronsToReq.num == self.num_of_req):
             a.append([user.dron_name, int(user.quantity) * int(score[user.dron_name])])
-        print(a)
 
         self.tableWidget.setRowCount(len(a))
         for i in range(len(a)):
@@ -256,6 +255,15 @@ class Session4(QMainWindow, Ui_MainWindow):
                 self.tableWidget.setCellWidget(i, 0, combo)
 
         self.tableWidget.resizeColumnsToContents()
+
+        db_session.global_init('sql/db/drons1.sqlite')
+        session = db_session.create_session()
+        a = []
+        for user in session.query(request_4.RequestDron).filter(request_4.RequestDron.number == self.num_of_req).all():
+            a.append([user.number, user.date_create, user.date_close, user.buyer, user.state])
+
+        self.buyer.setText()
+        self.state.currentText()
 
     def create_request(self):
         try:
