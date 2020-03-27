@@ -32,7 +32,7 @@ def simple_table(spisok, spacing=1):
     pdf = FPDF()
     pdf.set_font("Arial", size=12)
     pdf.add_page()
-
+    data = [['N', 'экмммэ', 'fewf']] + spisok
     col_width = pdf.w / 4.5
     row_height = pdf.font_size
     for row in data:

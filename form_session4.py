@@ -223,7 +223,6 @@ class Session4(QMainWindow, Ui_MainWindow):
         self.num_of_req = num_of_req
 
         self.tableWidget.setColumnCount(2)
-        self.tableWidget.setRowCount(1)
 
         self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem('Дрон'))
         self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem('Количество'))
@@ -242,8 +241,19 @@ class Session4(QMainWindow, Ui_MainWindow):
         for user in session.query(drons_cost.DronCost):
             score[user.name_dron] = user.cost
         for user in session.query(request_4.DronsToReq).filter(request_4.DronsToReq.num == self.num_of_req):
-            a.append([user.dron_name, user.quantity])
+            a.append([user.dron_name, int(user.quantity) * int(score[user.dron_name])])
+        print(a)
 
+        self.tableWidget.setRowCount(len(a))
+        for i in range(len(a)):
+            for j in range(2):
+                item1 = QTableWidgetItem(f'{a[i][1]}')
+                self.tableWidget.setItem(i, 1, item1)
+                combo = QComboBox()
+                combo_box_options = [a[i][0]] + combo_box_options
+                for t in combo_box_options:
+                    combo.addItem(t)
+                self.tableWidget.setCellWidget(i, 0, combo)
 
         self.tableWidget.resizeColumnsToContents()
 
@@ -321,7 +331,7 @@ class ListW(QMainWindow, Ui_ListWin):
         self.close()
 
     def change_request(self):
-        a = self.comboBox.currentText()
+        a = int(self.comboBox.currentText().split('  -   ')[0])
         if a:
             MainWin.parameters(a)
             MainWin.show()
