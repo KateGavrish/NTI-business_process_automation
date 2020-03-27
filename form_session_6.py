@@ -92,6 +92,7 @@ class Session6(QMainWindow, Ui_Session6):
 
     def make_graphic(self):
         self.graphWidget.clear()
+        self.graphWidget.setBackground('w')
         day1 = datetime.datetime(*list(self.dateEdit.date().getDate()))
         day2 = datetime.datetime(*list(self.dateEdit3.date().getDate()))
         db_session.global_init('app/db/drons1.sqlite')
