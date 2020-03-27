@@ -90,10 +90,8 @@ class Session6(QMainWindow, Ui_Session6):
         self.dateEdit.dateChanged.connect(self.make_graphic)
         self.dateEdit3.dateChanged.connect(self.make_graphic)
 
-    def keyPressEvent(self, QKeyEvent):
-        self.make_graphic()
-
     def make_graphic(self):
+        self.graphWidget.clear()
         day1 = datetime.datetime(*list(self.dateEdit.date().getDate()))
         day2 = datetime.datetime(*list(self.dateEdit3.date().getDate()))
         db_session.global_init('app/db/drons1.sqlite')
@@ -115,7 +113,22 @@ class Session6(QMainWindow, Ui_Session6):
             self.graphWidget.clear()
             days = [i for i in range(len(ostatki))]
             temperature = ostatki
+            days = [f"{day1.year}-{day1.month}-{day1.day}"]
+            day = day1
+            while day != day2:
+                day = day + datetime.timedelta(days=1)
+                days.append(f"{day.year}-{day.month}-{day.day}")
+            print(days)
+            days = [i for i in range(len(ostatki))]
+            temperature = ostatki
 
+            # в переменной days лежат все дни за которые нужна информация об остатках
+            # из дб загрузи все данные в переменную ostatki
+
+            # self.graphWidget.addLegend() вдруг понадобится
+            self.graphWidget.showGrid(x=True, y=True)
+            self.graphWidget.setXRange(0, int(10), padding=0)
+            self.graphWidget.setYRange(0, int(max(ostatki) * 1.1), padding=0)
             # self.graphWidget.addLegend() вдруг понадобится
             self.graphWidget.showGrid(x=True, y=True)
             self.graphWidget.setXRange(0, int(10), padding=0)
