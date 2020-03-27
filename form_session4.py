@@ -29,9 +29,9 @@ class Ui_ListWin(object):
         self.create.setGeometry(QtCore.QRect(330, 530, 211, 41))
         self.create.setObjectName("create")
 
-        self.select = QtWidgets.QPushButton(self.centralwidget)
-        self.select.setGeometry(QtCore.QRect(560, 530, 211, 41))
-        self.select.setObjectName("select")
+        #self.select = QtWidgets.QPushButton(self.centralwidget)
+        #self.select.setGeometry(QtCore.QRect(560, 530, 211, 41))
+        #self.select.setObjectName("select")
 
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setGeometry(QtCore.QRect(50, 80, 701, 26))
@@ -60,7 +60,7 @@ class Ui_ListWin(object):
         self.create.setText(_translate("ListWin", "Создать новую заявку"))
         self.label.setText(_translate("ListWin", "Выберите заявку из списка. Вы можете изменить ее или добавить новую"))
         self.label_2.setText(_translate("ListWin", "Выберите дату создания заявки"))
-        self.select.setText(_translate("ListWin", "Выбрать"))
+        #self.select.setText(_translate("ListWin", "Выбрать"))
 
 
 class Ui_MainWindow(object):
@@ -326,7 +326,7 @@ class ListW(QMainWindow, Ui_ListWin):
 
         self.create.clicked.connect(self.create_new_request)
         self.change.clicked.connect(self.change_request)
-        self.select.clicked.connect(self.selection)
+        #self.select.clicked.connect(self.selection)
 
         combo_box_options = []
         db_session.global_init('sql/db/drons1.sqlite')
