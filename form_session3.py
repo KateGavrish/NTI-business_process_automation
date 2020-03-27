@@ -17,15 +17,15 @@ class Ui_Session3(object):
         self.centralwidget = QtWidgets.QWidget(Session3)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(30, 10, 251, 51))
+        self.label.setGeometry(QtCore.QRect(30, 0, 351, 30))
         font = QtGui.QFont()
         font.setPointSize(18)
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(390, 10, 221, 51))
+        self.label_2.setGeometry(QtCore.QRect(30, 25, 300, 51))
         font = QtGui.QFont()
-        font.setPointSize(18)
+        font.setPointSize(16)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
 
@@ -34,7 +34,7 @@ class Ui_Session3(object):
         b2 = datetime.date.today().day
 
         self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
-        self.dateEdit.setGeometry(QtCore.QRect(610, 20, 161, 41))
+        self.dateEdit.setGeometry(QtCore.QRect(328, 37, 161, 28))
         self.dateEdit.setObjectName("dateEdit")
         self.dateEdit.setCalendarPopup(True)
         self.dateEdit.setDisplayFormat("yyyy-MM-dd")
@@ -49,7 +49,7 @@ class Ui_Session3(object):
         self.run.setGeometry(QtCore.QRect(30, 510, 151, 51))
         self.run.setObjectName("run")
         self.close_ = QtWidgets.QPushButton(self.centralwidget)
-        self.close_.setGeometry(QtCore.QRect(180, 510, 141, 51))
+        self.close_.setGeometry(QtCore.QRect(190, 510, 141, 51))
         self.close_.setObjectName("close")
         self.print_d = QtWidgets.QPushButton(self.centralwidget)
         self.print_d.setGeometry(QtCore.QRect(650, 510, 121, 51))
@@ -70,7 +70,6 @@ class Ui_Session3(object):
         self.run.setText(_translate("Session3", "Выполнить"))
         self.close_.setText(_translate("Session3", "Закрыть"))
         self.print_d.setText(_translate("Session3", "Печать"))
-
 
 class Session3(QMainWindow, Ui_Session3):
     def __init__(self):
