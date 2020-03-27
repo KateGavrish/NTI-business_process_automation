@@ -221,9 +221,15 @@ class Session4(QMainWindow, Ui_MainWindow):
 
     def parameters(self, num_of_req):
         self.num_of_req = num_of_req
+        self.tableWidget.clear()
+        self.tableWidget.setColumnCount(2)
 
-        # self.tableWidget.clear()
-        # self.tableWidget.setColumnCount(2)
+        combo_box_options = []
+        db_session.global_init('sql/db/drons1.sqlite')
+        session = db_session.create_session()
+        for user in session.query(details.DetailCategory):
+            combo_box_options.append(user.name_det)
+
         # self.tableWidget.setRowCount(len(complect_with_balance))
         # self.size_table = len(complect_with_balance)
         # self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem('Номер'))
