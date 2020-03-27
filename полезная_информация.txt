@@ -6,3 +6,11 @@ self.tableWidget.sortItems(номер колонки, QtCore.Qt.AscendingOrder) 
 self.tableWidget.sortItems(номер колонки) # по номеру
 
 self.tableWidget.sortItems(номер колонки, QtCore.Qt.DescendingOrder) # по дате
+
+меседж бокс:
+msg = QMessageBox()
+msg.setIcon(QMessageBox.Information)
+msg.setText("Не хватает товара на складе:")
+msg.setDetailedText(f"{'\n'.join(spisok)}")
+okButton = msg.addButton('ОК', QMessageBox.AcceptRole)
+msg.exec()
