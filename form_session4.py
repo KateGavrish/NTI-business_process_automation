@@ -175,6 +175,9 @@ class Session4(QMainWindow, Ui_MainWindow):
         ListW_.show()
         self.close()
 
+    def check(self):
+        return self.fsb_check_box.isChecked()
+
     def init_table(self):
         self.combo_box_options = []
         db_session.global_init('sql/db/drons1.sqlite')
@@ -294,12 +297,17 @@ class Session4(QMainWindow, Ui_MainWindow):
                 session.add(d)
                 session.commit()
 
+
+
             d = request_4.RequestDron()
             d.number = int(self.num_of_request.text())
             d.date_create = datetime.date(*self.date_create.date().getDate())
             d.date_close = datetime.date(*self.date_otg.date().getDate())
             d.buyer = self.buyer.text()
-            d.state = self.state.currentText()
+            if self.check():
+                d.state = 'Идет сборка'
+            else:
+                d.state = 'Запрошено разрешение у ФСБ'
 
             session = db_session.create_session()
             session.add(d)
