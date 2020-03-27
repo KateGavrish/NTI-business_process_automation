@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QComboBox, QMainWindow
-from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QMessageBox
+from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QMessageBox, QCheckBox
 import sys
 from ecxel_example import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
@@ -131,6 +131,9 @@ class Ui_MainWindow(object):
         self.list_req.setGeometry(QtCore.QRect(110, 370, 591, 61))
         self.list_req.setObjectName("list_req")
 
+        self.fsb_check_box = QtWidgets.QCheckBox('Проверка ФСБ', self.centralwidget)
+        self.fsb_check_box.setGeometry(QtCore.QRect(25, 270, 150, 21))
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -186,6 +189,7 @@ class Session4(QMainWindow, Ui_MainWindow):
         self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem('Количество'))
 
         self.add_string()
+
 
         combo_box_options = ['Создана', 'Идет сборка', 'Готова к отгрузке',
                              'Запрошено разрешение у ФСБ', 'Аннулирована', 'Отгружена']
