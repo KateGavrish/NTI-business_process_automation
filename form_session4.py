@@ -262,9 +262,11 @@ class Session4(QMainWindow, Ui_MainWindow):
         a = []
         for user in session.query(request_4.RequestDron).filter(request_4.RequestDron.number == self.num_of_req).all():
             a.append([user.number, user.date_create, user.date_close, user.buyer, user.state])
-
-        self.buyer.setText()
-        self.state.currentText()
+            self.buyer.setText(user.buyer)
+            self.state.setCurrentText(user.state)
+            self.date_create.setDate(user.date_create)
+            self.date_otg.setDate(user.date_close)
+            self.num_of_request.setText(str(user.number))
 
     def create_request(self):
         try:
