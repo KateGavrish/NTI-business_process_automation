@@ -25,14 +25,21 @@ class Ui_MainWindow(object):
         self.num_of_request = QtWidgets.QLineEdit(self.centralwidget)
         self.num_of_request.setGeometry(QtCore.QRect(172, 70, 201, 21))
         self.num_of_request.setObjectName("num_of_request")
+
+        b = datetime.date.today().year
+        b1 = datetime.date.today().month
+        b2 = datetime.date.today().day
+
         self.date_create = QtWidgets.QDateEdit(self.centralwidget)
         self.date_create.setGeometry(QtCore.QRect(270, 110, 110, 24))
         self.date_create.setCalendarPopup(True)
+        self.date_create.setDate(QtCore.QDate(b, b1, b2))
         self.date_create.setObjectName("date_create")
         self.date_otg = QtWidgets.QDateEdit(self.centralwidget)
         self.date_otg.setGeometry(QtCore.QRect(270, 150, 110, 24))
         self.date_otg.setCalendarPopup(True)
         self.date_otg.setObjectName("date_otg")
+        self.date_otg.setDate(QtCore.QDate(b, b1, b2))
         self.buyer = QtWidgets.QLineEdit(self.centralwidget)
         self.buyer.setGeometry(QtCore.QRect(160, 180, 221, 21))
         self.buyer.setObjectName("buyer")
@@ -121,6 +128,11 @@ class Session4(QMainWindow, Ui_MainWindow):
 
         self.add_string()
 
+        combo_box_options = ['Создана', 'Идет сборка', 'Готова к отгрузке',
+                             'Запрошено разрешение у ФСБ', 'Аннулирована', 'Отгружена']
+        for t in combo_box_options:
+            self.state.addItem(t)
+
     def add_string(self):
         self.tableWidget.setRowCount(self.size_table + 1)
         combo = QComboBox()
@@ -132,6 +144,8 @@ class Session4(QMainWindow, Ui_MainWindow):
 
         self.size_table += 1
         self.tableWidget.resizeColumnsToContents()
+        self.resize(801, 480)
+        self.resize(800, 480)
 
     def read_table(self):
         """ эта функция возвращает данные таблицы
@@ -149,7 +163,52 @@ class Session4(QMainWindow, Ui_MainWindow):
         return info_table
 
     def create_request(self):
-        pass
+        try:
+            db_session.global_init('sql/db/drons1.sqlite')
+            a = self.read_table()
+
+            diction = dict()
+            for i in range(len(a)):
+                if a[i][0] in diction:
+                    diction[a[i][0]] += int(a[i][1])
+                else:
+                    diction[a[i][0]] = int(a[i][1])
+
+            for item in diction.keys():
+                d = request_4.DronsToReq()
+                d.dron_name = item
+                d.quantity = diction[item]
+                d.num = int(self.num_of_request.text())
+                session = db_session.create_session()
+                session.add(d)
+                session.commit()
+
+            d = request_4.RequestDron()
+            d.number = int(self.num_of_request.text())
+            d.date_create = datetime.date(*self.date_create.date().getDate())
+            d.date_close = datetime.date(*self.date_otg.date().getDate())
+            d.buyer = self.buyer.text()
+            d.state = self.state.currentText()
+
+            session = db_session.create_session()
+            session.add(d)
+            session.commit()
+
+            msg = QMessageBox()
+            msg.setWindowTitle("Информация")
+            msg.setText("Заявка создана успешно")
+            msg.setStandardButtons(QMessageBox.Ok)
+            retval = msg.exec_()
+            if retval == QMessageBox.Ok:
+                Session4.close(self)
+        except Exception:
+            msg = QMessageBox()
+            msg.setWindowTitle("Информация")
+            msg.setText("Произошла ошибка, возможно вы ввели некорректные данные")
+            msg.setStandardButtons(QMessageBox.Ok)
+            retval = msg.exec_()
+            if retval == QMessageBox.Ok:
+                Session4.close(msg)
 
 
 if __name__ == '__main__':
