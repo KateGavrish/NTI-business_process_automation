@@ -9,7 +9,7 @@ from ecxel_example import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 import datetime
 from PyQt5 import QtCore
-
+import pyqtgraph as pg
 from form_session4 import ListW
 from sql.data.__all_models import *
 from make_xlsx_session_3 import *
@@ -61,6 +61,10 @@ class Ui_Session6(object):
         self.dateEdit3.setDisplayFormat("yyyy-MM-dd")
         self.dateEdit3.setDate(QtCore.QDate(b, b1, b2))
 
+        self.graphWidget = pg.PlotWidget(self.centralwidget)
+
+
+
         Session6.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(Session6)
         self.statusbar.setObjectName("statusbar")
@@ -88,7 +92,20 @@ class Session6(QMainWindow, Ui_Session6):
         self.dateEdit3.dateChanged.connect(self.make_graphic)
 
     def make_graphic(self):
-        print(0)
+        self.graphWidget.clear()
+
+        hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        temperature = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45]
+
+        # self.graphWidget.addLegend() вдруг понадобится
+        self.graphWidget.showGrid(x=True, y=True)
+        self.graphWidget.setXRange(0, 10, padding=0)
+        self.graphWidget.setYRange(20, 55, padding=0)
+
+        self.graphWidget.setBackground('w')
+
+        pen = pg.mkPen(color=(0, 255, 0), width=5)
+        self.graphWidget.plot(hour, temperature, pen=pen)
 
     def balance_calculation(self):
         """Подсчет остатков"""
