@@ -90,26 +90,41 @@ class Session6(QMainWindow, Ui_Session6):
         self.dateEdit.dateChanged.connect(self.make_graphic)
         self.dateEdit3.dateChanged.connect(self.make_graphic)
 
+    def keyPressEvent(self, QKeyEvent):
+        self.make_graphic()
+
     def make_graphic(self):
-        ostatki = [0, 10]
-        self.graphWidget.clear()
         day1 = datetime.datetime(*list(self.dateEdit.date().getDate()))
         day2 = datetime.datetime(*list(self.dateEdit3.date().getDate()))
-        delta = day2 - day1
-        print(delta)
+        db_session.global_init('app/db/drons1.sqlite')
+        session = db_session.create_session()
+        accums = []
+        for good in session.query(details.DetailCategory).filter(details.DetailCategory.category == 'Аккумуляторные батареи'):
+            accums.append(good.name_det)
+
+        data = dict()
+        for good in session.query(balance.Balance).filter(balance.Balance.date.between(day1, day2)):
+            if good.name_det in accums:
+                if good.date in data:
+                    data[good.date] += int(good.quantity)
+                else:
+                    data[good.date] = int(good.quantity)
+        ostatki = [data[x] for x in sorted(data.keys())]
         print(ostatki)
-        days = [i for i in range(len(ostatki))]
-        temperature = ostatki
+        if ostatki:
+            self.graphWidget.clear()
+            days = [i for i in range(len(ostatki))]
+            temperature = ostatki
 
-        # self.graphWidget.addLegend() вдруг понадобится
-        self.graphWidget.showGrid(x=True, y=True)
-        self.graphWidget.setXRange(0, int(10), padding=0)
-        self.graphWidget.setYRange(0, int(max(ostatki) * 1.1), padding=0)
+            # self.graphWidget.addLegend() вдруг понадобится
+            self.graphWidget.showGrid(x=True, y=True)
+            self.graphWidget.setXRange(0, int(10), padding=0)
+            self.graphWidget.setYRange(0, int(max(ostatki) * 1.1), padding=0)
 
-        self.graphWidget.setBackground('w')
+            self.graphWidget.setBackground('w')
 
-        pen = pg.mkPen(color=(0, 255, 0), width=5)
-        self.graphWidget.plot(days, temperature, pen=pen)
+            pen = pg.mkPen(color=(0, 255, 0), width=5)
+            self.graphWidget.plot(days, temperature, pen=pen)
 
     def balance_calculation(self):
         """Подсчет остатков"""

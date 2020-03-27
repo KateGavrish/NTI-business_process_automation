@@ -88,21 +88,14 @@ class UiMainWindow(QWidget):
 
     def write(self):
         a = self.read_table()
-        db_session.global_init('sql/db/drons1.sqlite')
+        db_session.global_init('/Users/gavrishekaterina/PycharmProjects/olimp3-master/app/drons1.sqlite')
+        print(a)
         for i in range(len(a)):
-            print(a)
-            d = receipt_of_components.ReceiptOfComponents()
             b = balance.Balance()
             b.name_det = a[i][0]
             b.quantity = int(a[i][2])
             b.date = datetime.datetime.today()
-            d.name_det = a[i][0]
-            d.serial_number = a[i][1]
-            d.quantity = a[i][2]
-            d.person = self.lineEdit_otvetstv.text()
-            d.date = datetime.datetime.today()
             session = db_session.create_session()
-            session.add(d)
             session.add(b)
             session.commit()
 
