@@ -30,7 +30,7 @@ class Ui_ListWin(object):
         self.create.setObjectName("create")
 
         self.select = QtWidgets.QPushButton(self.centralwidget)
-        self.select.setGeometry(QtCore.QRect(460, 530, 211, 41))
+        self.select.setGeometry(QtCore.QRect(560, 530, 211, 41))
         self.select.setObjectName("select")
 
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
@@ -60,6 +60,7 @@ class Ui_ListWin(object):
         self.create.setText(_translate("ListWin", "Создать новую заявку"))
         self.label.setText(_translate("ListWin", "Выберите заявку из списка. Вы можете изменить ее или добавить новую"))
         self.label_2.setText(_translate("ListWin", "Выберите дату создания заявки"))
+        self.select.setText(_translate("ListWin", "Выбрать"))
 
 
 class Ui_MainWindow(object):
