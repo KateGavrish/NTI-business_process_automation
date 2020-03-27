@@ -165,6 +165,7 @@ class Session3(QMainWindow, Ui_Session3):
             printer = QPrinter()
             list_of_balances = self.read_table()
             make_xlsx_table('result.xlsx', list_of_balances)
+            printer.setOutputFileName('result.pdf')
             print_dialog = QPrintDialog(printer)
             print_dialog.show()
         else:

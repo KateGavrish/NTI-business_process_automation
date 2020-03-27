@@ -14,5 +14,3 @@ def make_xlsx_table(filename, spisok):
               row.write(index, value)
     book.save(filename)
 
-
-# вот например: make_xlsx_table("lol", [[1, 2, 3], [4, 5, 6]])
