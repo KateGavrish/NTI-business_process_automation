@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QComboBox, QMainWindow
 from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel, QMessageBox
 import sys
@@ -161,7 +162,11 @@ class Session3(QMainWindow, Ui_Session3):
 
         msg.exec()
         if msg.clickedButton() == okButton:
-            pass  # здесь печать
+            printer = QPrinter()
+            list_of_balances = self.read_table()
+            make_xlsx_table('result.xlsx', list_of_balances)
+            print_dialog = QPrintDialog(printer)
+            print_dialog.show()
         else:
             list_of_balances = self.read_table()
             path_to_file = QFileDialog.getSaveFileName(self, 'Open file', None, "(*.xlsx)")[0]
