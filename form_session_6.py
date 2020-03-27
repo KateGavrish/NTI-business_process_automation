@@ -95,11 +95,17 @@ class Session6(QMainWindow, Ui_Session6):
         self.graphWidget.clear()
         day1 = datetime.datetime(*list(self.dateEdit.date().getDate()))
         day2 = datetime.datetime(*list(self.dateEdit3.date().getDate()))
-        delta = day2 - day1
-        print(delta)
-        print(ostatki)
+        days = [f"{day1.year}-{day1.month}-{day1.day}"]
+        day = day1
+        while day != day2:
+            day = day + datetime.timedelta(days=1)
+            days.append(f"{day.year}-{day.month}-{day.day}")
+        print(days)
         days = [i for i in range(len(ostatki))]
         temperature = ostatki
+
+        # в переменной days лежат все дни за которые нужна информация об остатках
+        # из дб загрузи все данные в переменную ostatki
 
         # self.graphWidget.addLegend() вдруг понадобится
         self.graphWidget.showGrid(x=True, y=True)
