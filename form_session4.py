@@ -60,7 +60,7 @@ class Ui_ListWin(object):
         self.create.setText(_translate("ListWin", "Создать новую заявку"))
         self.label.setText(_translate("ListWin", "Выберите заявку из списка. Вы можете изменить ее или добавить новую"))
         self.label_2.setText(_translate("ListWin", "Выберите дату создания заявки"))
-        #self.select.setText(_translate("ListWin", "Выбрать"))
+        self.select.setText(_translate("ListWin", "Выбрать"))
 
 
 class Ui_MainWindow(object):
