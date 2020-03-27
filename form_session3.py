@@ -160,13 +160,13 @@ class Session3(QMainWindow, Ui_Session3):
 
         msg.exec()
         if msg.clickedButton() == okButton:
-            print("Yes")
+            pass  # здесь печать
         else:
-            print("No")
-        list_of_balances = self.read_table()
-        path_to_file = QFileDialog.getSaveFileName(self, 'Open file', None, "(*.xlsx)")[0]
-        if path_to_file:
-            make_xlsx_table(path_to_file, list_of_balances)
+            list_of_balances = self.read_table()
+            path_to_file = QFileDialog.getSaveFileName(self, 'Open file', None, "(*.xlsx)")[0]
+            if path_to_file:
+                make_xlsx_table(path_to_file, list_of_balances)
+
 
 
 if __name__ == '__main__':
