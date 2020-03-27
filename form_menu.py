@@ -50,9 +50,11 @@ class Menu(QMainWindow, Ui_Menu):
         self.balance.clicked.connect(self.balance_win)
 
     def req_win(self):
+        ListW_ = ListW()
         MainWin.show()
 
     def balance_win(self):
+        ListW_ = ListW()
         MainWin1.show()
 
 

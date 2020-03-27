@@ -154,7 +154,7 @@ class Session4(QMainWindow, Ui_MainWindow):
         self.plus_str.clicked.connect(self.add_string)
         self.create_req.clicked.connect(self.create_request)
         self.list_req.clicked.connect(self.open_list)
-
+        self.ListW_ = ListW()
         self.size_table = 0
 
         self.init_table()
@@ -183,8 +183,8 @@ class Session4(QMainWindow, Ui_MainWindow):
         return complect_with_balance
 
     def open_list(self):
-        ListW_.__init__()
-        ListW_.show()
+        self.ListW_.__init__()
+        self.ListW_.show()
         self.close()
 
     def check(self):
