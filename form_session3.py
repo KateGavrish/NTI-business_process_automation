@@ -152,6 +152,18 @@ class Session3(QMainWindow, Ui_Session3):
 
     def print_document(self):
         """Печать документа"""
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+        msg.setInformativeText("Выберите:")
+
+        okButton = msg.addButton('Печать', QMessageBox.AcceptRole)
+        msg.addButton('Сохранить', QMessageBox.RejectRole)
+
+        msg.exec()
+        if msg.clickedButton() == okButton:
+            print("Yes")
+        else:
+            print("No")
         list_of_balances = self.read_table()
         path_to_file = QFileDialog.getSaveFileName(self, 'Open file', None, "(*.xlsx)")[0]
         if path_to_file:
