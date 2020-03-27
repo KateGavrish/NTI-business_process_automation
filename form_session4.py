@@ -222,6 +222,32 @@ class Session4(QMainWindow, Ui_MainWindow):
     def parameters(self, num_of_req):
         self.num_of_req = num_of_req
 
+        # self.tableWidget.clear()
+        # self.tableWidget.setColumnCount(2)
+        # self.tableWidget.setRowCount(len(complect_with_balance))
+        # self.size_table = len(complect_with_balance)
+        # self.tableWidget.setHorizontalHeaderItem(0, QTableWidgetItem('Номер'))
+        # self.tableWidget.setHorizontalHeaderItem(1, QTableWidgetItem('Комплектующее'))
+        # self.tableWidget.setHorizontalHeaderItem(2, QTableWidgetItem('Остаток'))
+        # i = 1
+        # for item in complect_with_balance.keys():
+        #     itm = QTableWidgetItem(f'{i}')
+        #     itm.setFlags(QtCore.Qt.ItemIsEnabled)
+        #
+        #     itm1 = QTableWidgetItem(item)
+        #     itm1.setFlags(QtCore.Qt.ItemIsEnabled)
+        #
+        #     itm2 = QTableWidgetItem(str(complect_with_balance[item]))
+        #     itm2.setFlags(QtCore.Qt.ItemIsEnabled)
+        #
+        #     self.tableWidget.setItem(i - 1, 0, itm)
+        #     self.tableWidget.setItem(i - 1, 1, itm1)
+        #     self.tableWidget.setItem(i - 1, 2, itm2)
+        #
+        #     i += 1
+
+        self.tableWidget.resizeColumnsToContents()
+
     def create_request(self):
         try:
             db_session.global_init('sql/db/drons1.sqlite')

@@ -71,6 +71,7 @@ class Ui_Session3(object):
         self.close_.setText(_translate("Session3", "Закрыть"))
         self.print_d.setText(_translate("Session3", "Печать"))
 
+
 class Session3(QMainWindow, Ui_Session3):
     def __init__(self):
         super().__init__()
