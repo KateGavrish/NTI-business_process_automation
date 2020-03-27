@@ -297,8 +297,6 @@ class Session4(QMainWindow, Ui_MainWindow):
                 session.add(d)
                 session.commit()
 
-
-
             d = request_4.RequestDron()
             d.number = int(self.num_of_request.text())
             d.date_create = datetime.date(*self.date_create.date().getDate())
