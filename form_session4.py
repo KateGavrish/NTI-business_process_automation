@@ -326,7 +326,7 @@ class ListW(QMainWindow, Ui_ListWin):
 
         self.create.clicked.connect(self.create_new_request)
         self.change.clicked.connect(self.change_request)
-        #self.select.clicked.connect(self.selection)
+        self.select.clicked.connect(self.selection)
 
         combo_box_options = []
         db_session.global_init('sql/db/drons1.sqlite')
@@ -351,9 +351,15 @@ class ListW(QMainWindow, Ui_ListWin):
 
         db_session.global_init('sql/db/drons1.sqlite')
         session = db_session.create_session()
+        score = dict()
+        for user in session.query(drons_cost.DronCost):
+            score[user.name_dron] = user.cost
         a = []
-        for user in session.query(request_4.RequestDron).filter(request_4.RequestDron.number == int(self.s.split('  -   ')[0])):
-            a.append([int(user.id), str(user.date_create), str(user.date_close), user.buyer, user.state])
+        for user in session.query(request_4.RequestDron):
+            s = 0
+            for u in session.query(request_4.DronsToReq).filter(request_4.DronsToReq.num == user.number):
+                s += int(u.quantity) * int(score[u.dron_name])
+            a.append([int(user.id), str(user.date_create), str(user.date_change), user.state, str(s)])
         a.sort(key=lambda x: x[0])
         self.tableWidget.setRowCount(len(a))
         i = 1

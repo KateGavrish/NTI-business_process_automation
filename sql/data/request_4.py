@@ -14,6 +14,7 @@ class RequestDron(SqlAlchemyBase, UserMixin, SerializerMixin):
     number = sqlalchemy.Column(sqlalchemy.Integer)
     date_create = sqlalchemy.Column(sqlalchemy.Date)
     date_close = sqlalchemy.Column(sqlalchemy.Date)
+    date_change = sqlalchemy.Column(sqlalchemy.Date, default=datetime.date.today())
     buyer = sqlalchemy.Column(sqlalchemy.String)
     state = sqlalchemy.Column(sqlalchemy.String)
 
