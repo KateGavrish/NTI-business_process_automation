@@ -4,3 +4,5 @@
 self.tableWidget.sortItems(номер колонки, QtCore.Qt.AscendingOrder) # по алфавиту (состояние)
 
 self.tableWidget.sortItems(номер колонки) # по номеру
+
+self.tableWidget.sortItems(номер колонки, QtCore.Qt.DescendingOrder) # по дате
