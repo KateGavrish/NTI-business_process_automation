@@ -210,7 +210,7 @@ class Session4(QMainWindow, Ui_MainWindow):
             список состоит из списков,  вот так:
             [["комплектющее", "количество"]]"""
         info_table = []
-        for i in range(self.size_table):
+        for i in range(self.tableWidget.rowCount()):
             a = []
             for j in range(2):
                 if j != 0:
@@ -307,7 +307,8 @@ class Session4(QMainWindow, Ui_MainWindow):
             retval = msg.exec_()
             if retval == QMessageBox.Ok:
                 Session4.close(msg)
-        except Exception:
+        except Exception as e:
+            print(e)
             msg = QMessageBox()
             msg.setWindowTitle("Информация")
             msg.setText("Произошла ошибка, возможно вы ввели некорректные данные")
@@ -329,8 +330,11 @@ class ListW(QMainWindow, Ui_ListWin):
         combo_box_options = []
         db_session.global_init('sql/db/drons1.sqlite')
         session = db_session.create_session()
+        nums = []
         for user in session.query(request_4.RequestDron):
-            combo_box_options.append(f'{user.number}  -   {user.date_create}   -   {user.buyer}')
+            if user.number not in nums:
+                combo_box_options.append(f'{user.number}  -   {user.date_create}   -   {user.buyer}')
+                nums.append(user.number)
         for t in combo_box_options:
             self.comboBox.addItem(t)
 
