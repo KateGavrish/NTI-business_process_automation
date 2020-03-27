@@ -340,7 +340,11 @@ class ListW(QMainWindow, Ui_ListWin):
             if user.number not in nums:
                 combo_box_options.append(f'{user.number}  -   {user.date_create}   -   {user.buyer}')
                 nums.append(user.number)
-        for t in combo_box_options:
+        self.comboBox.clear()
+        for t in ["Сортировка по номеру",
+                  "Сортировка по дате создания",
+                  "Сортировка по дате изменения состояния",
+                  "Сортировка по состоянию"]:
             self.comboBox.addItem(t)
 
     def selection(self):
@@ -392,6 +396,15 @@ class ListW(QMainWindow, Ui_ListWin):
             i += 1
 
         self.tableWidget.resizeColumnsToContents()
+        if self.s == "Сортировка по номеру":
+            self.tableWidget.sortItems(0)
+        elif self.s == "Сортировка по дате создания":
+            self.tableWidget.sortItems(1, QtCore.Qt.DescendingOrder)
+        elif self.s == "Сортировка по дате изменения состояния":
+            self.tableWidget.sortItems(2, QtCore.Qt.DescendingOrder)
+        elif self.s == "Сортировка по состоянию":
+            self.tableWidget.sortItems(3, QtCore.Qt.AscendingOrder)
+
 
     def create_new_request(self):
         MainWin.show()
