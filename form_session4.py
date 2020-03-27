@@ -11,6 +11,57 @@ from sql.data.__all_models import *
 from make_xlsx_session_3 import *
 
 
+class Ui_ListWin(object):
+    def setupUi(self, ListWin):
+        ListWin.setObjectName("ListWin")
+        ListWin.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(ListWin)
+        self.centralwidget.setObjectName("centralwidget")
+        self.change = QtWidgets.QPushButton(self.centralwidget)
+        self.change.setGeometry(QtCore.QRect(200, 530, 121, 41))
+        self.change.setObjectName("change")
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setGeometry(QtCore.QRect(50, 120, 701, 401))
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(0)
+        self.tableWidget.setRowCount(0)
+        self.create = QtWidgets.QPushButton(self.centralwidget)
+        self.create.setGeometry(QtCore.QRect(330, 530, 211, 41))
+        self.create.setObjectName("create")
+
+        self.select = QtWidgets.QPushButton(self.centralwidget)
+        self.select.setGeometry(QtCore.QRect(460, 530, 211, 41))
+        self.select.setObjectName("select")
+
+        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox.setGeometry(QtCore.QRect(50, 80, 701, 26))
+        self.comboBox.setObjectName("comboBox")
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(50, 30, 591, 51))
+        self.label.setObjectName("label")
+        self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
+        self.dateEdit.setGeometry(QtCore.QRect(670, 10, 110, 24))
+        self.dateEdit.setObjectName("dateEdit")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(450, 10, 211, 21))
+        self.label_2.setObjectName("label_2")
+        ListWin.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(ListWin)
+        self.statusbar.setObjectName("statusbar")
+        ListWin.setStatusBar(self.statusbar)
+
+        self.retranslateUi(ListWin)
+        QtCore.QMetaObject.connectSlotsByName(ListWin)
+
+    def retranslateUi(self, ListWin):
+        _translate = QtCore.QCoreApplication.translate
+        ListWin.setWindowTitle(_translate("ListWin", "Список заявок"))
+        self.change.setText(_translate("ListWin", "Изменить"))
+        self.create.setText(_translate("ListWin", "Создать новую заявку"))
+        self.label.setText(_translate("ListWin", "Выберите заявку из списка. Вы можете изменить ее или добавить новую"))
+        self.label_2.setText(_translate("ListWin", "Выберите дату создания заявки"))
+
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -108,10 +159,16 @@ class Session4(QMainWindow, Ui_MainWindow):
 
         self.plus_str.clicked.connect(self.add_string)
         self.create_req.clicked.connect(self.create_request)
+        self.list_req.clicked.connect(self.open_list)
 
         self.size_table = 0
 
         self.init_table()
+
+    def open_list(self):
+        ListW_.__init__()
+        ListW_.show()
+        self.close()
 
     def init_table(self):
         self.combo_box_options = []
@@ -162,6 +219,9 @@ class Session4(QMainWindow, Ui_MainWindow):
             info_table.append(a)
         return info_table
 
+    def parameters(self, num_of_req):
+        self.num_of_req = num_of_req
+
     def create_request(self):
         try:
             db_session.global_init('sql/db/drons1.sqlite')
@@ -200,7 +260,7 @@ class Session4(QMainWindow, Ui_MainWindow):
             msg.setStandardButtons(QMessageBox.Ok)
             retval = msg.exec_()
             if retval == QMessageBox.Ok:
-                Session4.close(self)
+                Session4.close(msg)
         except Exception:
             msg = QMessageBox()
             msg.setWindowTitle("Информация")
@@ -211,8 +271,49 @@ class Session4(QMainWindow, Ui_MainWindow):
                 Session4.close(msg)
 
 
+class ListW(QMainWindow, Ui_ListWin):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+
+        self.create.clicked.connect(self.create_new_request)
+        self.change.clicked.connect(self.change_request)
+        self.select.clicked.connect(self.selection)
+
+        combo_box_options = []
+        db_session.global_init('sql/db/drons1.sqlite')
+        session = db_session.create_session()
+        for user in session.query(request_4.RequestDron):
+            combo_box_options.append(f'{user.number}  -   {user.date_create}   -   {user.buyer}')
+        for t in combo_box_options:
+            self.comboBox.addItem(t)
+
+    def selection(self):
+        self.s = self.comboBox.currentText()
+
+    def create_new_request(self):
+        MainWin.show()
+        self.close()
+
+    def change_request(self):
+        a = self.comboBox.currentText()
+        if a:
+            MainWin.parameters(a)
+            MainWin.show()
+            self.close()
+        else:
+            msg = QMessageBox()
+            msg.setWindowTitle("Информация")
+            msg.setText("Выберите заявку и повторите попытку")
+            msg.setStandardButtons(QMessageBox.Ok)
+            retval = msg.exec_()
+            if retval == QMessageBox.Ok:
+                Session4.close(msg)
+
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWin = Session4()
+    ListW_ = ListW()
     MainWin.show()
     sys.exit(app.exec())
