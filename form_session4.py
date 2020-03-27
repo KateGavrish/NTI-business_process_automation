@@ -205,7 +205,6 @@ class Session4(QMainWindow, Ui_MainWindow):
 
         self.add_string()
 
-
         combo_box_options = ['Создана', 'Идет сборка', 'Готова к отгрузке',
                              'Запрошено разрешение у ФСБ', 'Аннулирована', 'Отгружена']
         for t in combo_box_options:
@@ -309,7 +308,11 @@ class Session4(QMainWindow, Ui_MainWindow):
     def spis(self, num):
         n = self.try_spis(num)
         if n:
-            pass
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+            msg.setText("Не хватает товара на складе:\n" + '\n'.join([f'{x[0]} {x[1]}' for x in n.items()]))
+            okButton = msg.addButton('ОК', QMessageBox.AcceptRole)
+            msg.exec()
         else:
             db_session.global_init('sql/db/drons1.sqlite')
             session = db_session.create_session()
@@ -358,14 +361,12 @@ class Session4(QMainWindow, Ui_MainWindow):
             d.date_close = datetime.date(*self.date_otg.date().getDate())
             if self.check():
                 d.state = 'Идет сборка'
-            elif self.buyer.text() == 'Создана':
+            elif self.state.currentText() == 'Создана':
                 d.state = 'Запрошено разрешение у ФСБ'
             else:
-                d.buyer = self.buyer.text()
-                if self.buyer.text() == 'Готова к отгрузке':
+                d.state = self.state.currentText()
+                if self.state.currentText() == 'Готова к отгрузке':
                     self.spis(int(self.num_of_request.text()))
-            #     доделать
-
 
             session = db_session.create_session()
             session.add(d)
