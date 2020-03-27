@@ -159,6 +159,29 @@ class Session4(QMainWindow, Ui_MainWindow):
 
         self.init_table()
 
+    def balance_calculation(self):
+        """Подсчет остатков"""
+        b = datetime.date.today().year
+        b1 = datetime.date.today().month
+        b2 = datetime.date.today().day
+
+        date = datetime.date(b, b1, b2)
+        complect_with_balance = dict()
+        db_session.global_init('sql/db/drons1.sqlite')
+
+        session = db_session.create_session()
+        for user in session.query(count_for_dron.QuanForDron):
+            if user.name_det not in complect_with_balance:
+                complect_with_balance[user.name_det] = int(user.quantity)
+            else:
+                complect_with_balance[user.name_det] += int(user.quantity)
+        for user in session.query(balance.Balance).filter(balance.Balance.date <= date):
+            if user.name_det not in complect_with_balance:
+                complect_with_balance[user.name_det] = int(user.quantity)
+            else:
+                complect_with_balance[user.name_det] += int(user.quantity)
+        return complect_with_balance
+
     def open_list(self):
         ListW_.__init__()
         ListW_.show()
@@ -265,6 +288,49 @@ class Session4(QMainWindow, Ui_MainWindow):
             self.date_otg.setDate(user.date_close)
             self.num_of_request.setText(str(user.number))
 
+    def try_spis(self, num):
+        nehv = dict()
+        db_session.global_init('sql/db/drons1.sqlite')
+        session = db_session.create_session()
+        a = []
+        ost = self.balance_calculation()
+        for user in session.query(request_4.DronsToReq).filter(request_4.DronsToReq.num == num):
+            a.append([user.dron_name, int(user.quantity)])
+        for x in a:
+            for u in session.query(count_for_dron.QuanForDron).filter(count_for_dron.QuanForDron.name_dron == x[0]):
+                count_dr = int(x[1])
+                if ost[u.name_det] - count_dr * u.quantity < 0:
+                    if u.name_det not in nehv:
+                        nehv[u.name_det] = abs(ost[u.name_det] - count_dr * u.quantity)
+                    else:
+                        nehv[u.name_det] += abs(ost[u.name_det] - count_dr * u.quantity)
+        return nehv
+
+    def spis(self, num):
+        n = self.try_spis(num)
+        if n:
+            pass
+        else:
+            db_session.global_init('sql/db/drons1.sqlite')
+            session = db_session.create_session()
+            a = []
+            ost = self.balance_calculation()
+            for user in session.query(request_4.DronsToReq).filter(request_4.DronsToReq.num == num):
+                a.append([user.dron_name, int(user.quantity)])
+            for x in a:
+                for u in session.query(count_for_dron.QuanForDron).filter(count_for_dron.QuanForDron.name_dron == x[0]):
+                    count_dr = int(x[1])
+                    b1 = datetime.date.today().year
+                    b2 = datetime.date.today().month
+                    b3 = datetime.date.today().day
+
+                    b = balance.Balance()
+                    b.name_det = u.name_det
+                    b.quantity = -(ost[u.name_det] - count_dr * u.quantity)
+                    b.date = datetime.date(b1, b2, b3)
+                    session.add(b)
+                    session.commit()
+
     def create_request(self):
         try:
             db_session.global_init('sql/db/drons1.sqlite')
@@ -290,11 +356,16 @@ class Session4(QMainWindow, Ui_MainWindow):
             d.number = int(self.num_of_request.text())
             d.date_create = datetime.date(*self.date_create.date().getDate())
             d.date_close = datetime.date(*self.date_otg.date().getDate())
-            d.buyer = self.buyer.text()
             if self.check():
                 d.state = 'Идет сборка'
-            else:
+            elif self.buyer.text() == 'Создана':
                 d.state = 'Запрошено разрешение у ФСБ'
+            else:
+                d.buyer = self.buyer.text()
+                if self.buyer.text() == 'Готова к отгрузке':
+                    self.spis(int(self.num_of_request.text()))
+            #     доделать
+
 
             session = db_session.create_session()
             session.add(d)
@@ -399,7 +470,6 @@ class ListW(QMainWindow, Ui_ListWin):
             self.tableWidget.sortItems(2, QtCore.Qt.DescendingOrder)
         elif self.s == "Сортировка по состоянию":
             self.tableWidget.sortItems(3, QtCore.Qt.AscendingOrder)
-
 
     def create_new_request(self):
         MainWin.show()

@@ -9,6 +9,8 @@ from ecxel_example import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 import datetime
 from PyQt5 import QtCore
+
+from form_session4 import ListW
 from sql.data.__all_models import *
 from make_xlsx_session_3 import *
 
@@ -179,6 +181,7 @@ class Session3(QMainWindow, Ui_Session3):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    ListW_ = ListW()
     MainWin = Session3()
     MainWin.show()
     sys.exit(app.exec())
