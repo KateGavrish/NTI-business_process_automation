@@ -29,9 +29,9 @@ class Ui_ListWin(object):
         self.create.setGeometry(QtCore.QRect(330, 530, 211, 41))
         self.create.setObjectName("create")
 
-        #self.select = QtWidgets.QPushButton(self.centralwidget)
-        #self.select.setGeometry(QtCore.QRect(560, 530, 211, 41))
-        #self.select.setObjectName("select")
+        self.select = QtWidgets.QPushButton(self.centralwidget)
+        self.select.setGeometry(QtCore.QRect(560, 530, 211, 41))
+        self.select.setObjectName("select")
 
         self.comboBox = QtWidgets.QComboBox(self.centralwidget)
         self.comboBox.setGeometry(QtCore.QRect(50, 80, 701, 26))
