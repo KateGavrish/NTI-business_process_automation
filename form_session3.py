@@ -106,7 +106,7 @@ class Session3(QMainWindow, Ui_Session3):
             if user.name_det not in complect_with_balance:
                 complect_with_balance[user.name_det] = int(user.quantity)
             else:
-                complect_with_balance[user.name_det] += int(user.quantity)
+                complect_with_balance[user.name_det] += int(user.quantity) + 10
         return complect_with_balance
 
     def info_output(self):

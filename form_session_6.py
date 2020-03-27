@@ -62,8 +62,7 @@ class Ui_Session6(object):
         self.dateEdit3.setDate(QtCore.QDate(b, b1, b2))
 
         self.graphWidget = pg.PlotWidget(self.centralwidget)
-
-
+        self.graphWidget.setGeometry(QtCore.QRect(50, 100, 500, 400))
 
         Session6.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(Session6)
