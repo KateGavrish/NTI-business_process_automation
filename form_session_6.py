@@ -91,20 +91,25 @@ class Session6(QMainWindow, Ui_Session6):
         self.dateEdit3.dateChanged.connect(self.make_graphic)
 
     def make_graphic(self):
+        ostatki = [0, 10]
         self.graphWidget.clear()
-
-        hour = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        temperature = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45]
+        day1 = datetime.datetime(*list(self.dateEdit.date().getDate()))
+        day2 = datetime.datetime(*list(self.dateEdit3.date().getDate()))
+        delta = day2 - day1
+        print(delta)
+        print(ostatki)
+        days = [i for i in range(len(ostatki))]
+        temperature = ostatki
 
         # self.graphWidget.addLegend() вдруг понадобится
         self.graphWidget.showGrid(x=True, y=True)
-        self.graphWidget.setXRange(0, 10, padding=0)
-        self.graphWidget.setYRange(20, 55, padding=0)
+        self.graphWidget.setXRange(0, int(10), padding=0)
+        self.graphWidget.setYRange(0, int(max(ostatki) * 1.1), padding=0)
 
         self.graphWidget.setBackground('w')
 
         pen = pg.mkPen(color=(0, 255, 0), width=5)
-        self.graphWidget.plot(hour, temperature, pen=pen)
+        self.graphWidget.plot(days, temperature, pen=pen)
 
     def balance_calculation(self):
         """Подсчет остатков"""
