@@ -1,2 +1,8 @@
 пароль от архива: vpLKpNX]
 ссылка на гугл диск: https://drive.google.com/drive/folders/1RdHV73-RNlxzouHgvAf5Mo0HqVlObrev
+
+self.tableWidget.sortItems(номер колонки, QtCore.Qt.AscendingOrder) # по алфавиту (состояние)
+
+self.tableWidget.sortItems(номер колонки) # по номеру
+
+self.tableWidget.sortItems(номер колонки, QtCore.Qt.DescendingOrder) # по дате
