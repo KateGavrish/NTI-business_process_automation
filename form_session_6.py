@@ -93,8 +93,8 @@ class Session6(QMainWindow, Ui_Session6):
     def make_graphic(self):
         self.graphWidget.clear()
         self.graphWidget.setBackground('w')
-        day1 = datetime.date(*list(self.dateEdit.date().getDate()))
-        day2 = datetime.date(*list(self.dateEdit3.date().getDate()))
+        day1 = datetime.date(*list(self.dateEdit.date().getDate())) - datetime.timedelta(days=1)
+        day2 = datetime.date(*list(self.dateEdit3.date().getDate())) + datetime.timedelta(days=1)
         #if day2 > datetime.datetime.today():
         #    day2 = datetime.datetime.today()
         #elif day1 > datetime.datetime.today():
@@ -115,13 +115,16 @@ class Session6(QMainWindow, Ui_Session6):
         if day1 > datetime.date(b, b1, b2):
             day1 = datetime.date(b, b1, b2)
         data = dict()
+        a = self.balance_calculation(day1)
+        a = sum([a[x] for x in a.keys() if x in accums])
+        print(a)
         for good in session.query(balance.Balance).filter(balance.Balance.date.between(day1, day2)):
             if good.name_det in accums:
                 if good.date in data:
                     data[good.date] += int(good.quantity)
                 else:
                     data[good.date] = int(good.quantity)
-        ostatki = [data[x] for x in sorted(data.keys())]
+        ostatki = [a] + [data[x] for x in sorted(data.keys())]
         self.graphWidget.clear()
         days = [f"{day1.year}-{day1.month}-{day1.day}"]
         day = day1
@@ -139,7 +142,11 @@ class Session6(QMainWindow, Ui_Session6):
             index_end = key_data[i + 1][1] if i + 1 < len(key_data) else len(days)
             value = key_data[i][2]
             ostatki += [value] * int(index_end - index_start)
+        ostatki = [a] + ostatki
         days = [i for i in range(len(ostatki))]
+        if days == [0]:
+            days += [0.25]
+            ostatki += ostatki
         if ostatki:
             # в переменной days лежат все дни за которые нужна информация об остатках
             # из дб загрузи все данные в переменную ostatki
@@ -154,9 +161,8 @@ class Session6(QMainWindow, Ui_Session6):
             pen = pg.mkPen(color=(0, 255, 0), width=5)
             self.graphWidget.plot(days, ostatki, pen=pen)
 
-    def balance_calculation(self):
+    def balance_calculation(self, date):
         """Подсчет остатков"""
-        date = datetime.date(*self.dateEdit.date().getDate())
         complect_with_balance = dict()
         db_session.global_init('sql/db/drons1.sqlite')
 
