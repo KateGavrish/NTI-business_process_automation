@@ -93,8 +93,8 @@ class Session6(QMainWindow, Ui_Session6):
     def make_graphic(self):
         self.graphWidget.clear()
         self.graphWidget.setBackground('w')
-        day1 = datetime.datetime(*list(self.dateEdit.date().getDate()))
-        day2 = datetime.datetime(*list(self.dateEdit3.date().getDate()))
+        day1 = datetime.date(*list(self.dateEdit.date().getDate()))
+        day2 = datetime.date(*list(self.dateEdit3.date().getDate()))
         #if day2 > datetime.datetime.today():
         #    day2 = datetime.datetime.today()
         #elif day1 > datetime.datetime.today():
@@ -107,7 +107,11 @@ class Session6(QMainWindow, Ui_Session6):
         accums = []
         for good in session.query(details.DetailCategory).filter(details.DetailCategory.category == 'Аккумуляторные батареи'):
             accums.append(good.name_det)
-
+        b = datetime.date.today().year
+        b1 = datetime.date.today().month
+        b2 = datetime.date.today().day
+        if day2 > datetime.date(b, b1, b2):
+            day2 = datetime.date(b, b1, b2)
         data = dict()
         for good in session.query(balance.Balance).filter(balance.Balance.date.between(day1, day2)):
             if good.name_det in accums:
@@ -122,7 +126,6 @@ class Session6(QMainWindow, Ui_Session6):
         while day != day2:
             day = day + datetime.timedelta(days=1)
             days.append(f"{day.year}-{day.month}-{day.day}")
-        # print(len(days))
         key_data = []
         for i in list(data.keys()):
             key_data.append((f"{i.year}-{i.month}-{i.day}", days.index(f"{i.year}-{i.month}-{i.day}"), data[i]))
