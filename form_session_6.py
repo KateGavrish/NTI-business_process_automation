@@ -109,20 +109,27 @@ class Session6(QMainWindow, Ui_Session6):
                 else:
                     data[good.date] = int(good.quantity)
         ostatki = [data[x] for x in sorted(data.keys())]
-        print(ostatki)
+        self.graphWidget.clear()
+        days = [f"{day1.year}-{day1.month}-{day1.day}"]
+        day = day1
+        while day != day2:
+            day = day + datetime.timedelta(days=1)
+            days.append(f"{day.year}-{day.month}-{day.day}")
+        print(len(days))
+        key_data = []
+        for i in list(data.keys()):
+            key_data.append((f"{i.year}-{i.month}-{i.day}", days.index(f"{i.year}-{i.month}-{i.day}"), data[i]))
+        if key_data:
+            key_data = sorted(key_data, key=lambda x: x[1])
+        ostatki = []
+        for i in range(len(key_data)):
+            index_start = key_data[i][1]
+            index_end = key_data[i + 1][1] if i + 1 < len(key_data) else len(key_data)
+            value = key_data[i][2]
+            ostatki += [value] * int(index_end - index_start)
+        days = [i for i in range(len(ostatki))]
+        print(len(ostatki))
         if ostatki:
-            self.graphWidget.clear()
-            days = [i for i in range(len(ostatki))]
-            temperature = ostatki
-            days = [f"{day1.year}-{day1.month}-{day1.day}"]
-            day = day1
-            while day != day2:
-                day = day + datetime.timedelta(days=1)
-                days.append(f"{day.year}-{day.month}-{day.day}")
-            print(days)
-            days = [i for i in range(len(ostatki))]
-            temperature = ostatki
-
             # в переменной days лежат все дни за которые нужна информация об остатках
             # из дб загрузи все данные в переменную ostatki
 
@@ -138,7 +145,7 @@ class Session6(QMainWindow, Ui_Session6):
             self.graphWidget.setBackground('w')
 
             pen = pg.mkPen(color=(0, 255, 0), width=5)
-            self.graphWidget.plot(days, temperature, pen=pen)
+            self.graphWidget.plot(days, ostatki, pen=pen)
 
     def balance_calculation(self):
         """Подсчет остатков"""
