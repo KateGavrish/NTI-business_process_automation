@@ -124,11 +124,10 @@ class Session6(QMainWindow, Ui_Session6):
         ostatki = []
         for i in range(len(key_data)):
             index_start = key_data[i][1]
-            index_end = key_data[i + 1][1] if i + 1 < len(key_data) else len(key_data)
+            index_end = key_data[i + 1][1] if i + 1 < len(key_data) else len(days)
             value = key_data[i][2]
             ostatki += [value] * int(index_end - index_start)
         days = [i for i in range(len(ostatki))]
-        print(len(ostatki))
         if ostatki:
             # в переменной days лежат все дни за которые нужна информация об остатках
             # из дб загрузи все данные в переменную ostatki
