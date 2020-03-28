@@ -112,6 +112,8 @@ class Session6(QMainWindow, Ui_Session6):
         b2 = datetime.date.today().day
         if day2 > datetime.date(b, b1, b2):
             day2 = datetime.date(b, b1, b2)
+        if day1 > datetime.date(b, b1, b2):
+            day1 = datetime.date(b, b1, b2)
         data = dict()
         for good in session.query(balance.Balance).filter(balance.Balance.date.between(day1, day2)):
             if good.name_det in accums:
@@ -142,10 +144,6 @@ class Session6(QMainWindow, Ui_Session6):
             # в переменной days лежат все дни за которые нужна информация об остатках
             # из дб загрузи все данные в переменную ostatki
 
-            # self.graphWidget.addLegend() вдруг понадобится
-            self.graphWidget.showGrid(x=True, y=True)
-            self.graphWidget.setXRange(0, int(10), padding=0)
-            self.graphWidget.setYRange(0, int(max(ostatki) * 1.1), padding=0)
             # self.graphWidget.addLegend() вдруг понадобится
             self.graphWidget.showGrid(x=True, y=True)
             self.graphWidget.setXRange(0, int(10), padding=0)
