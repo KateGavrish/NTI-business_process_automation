@@ -102,6 +102,7 @@ class Session6(QMainWindow, Ui_Session6):
         #    day2 = datetime.datetime.now()
         #    day2 = day1.date()
         # print(day1)
+        fl = True
         db_session.global_init('app/db/drons1.sqlite')
         session = db_session.create_session()
         accums = []
@@ -110,56 +111,66 @@ class Session6(QMainWindow, Ui_Session6):
         b = datetime.date.today().year
         b1 = datetime.date.today().month
         b2 = datetime.date.today().day
+        if day1 > day2:
+            self.graphWidget.clear()
+            fl = False
         if day2 > datetime.date(b, b1, b2):
             day2 = datetime.date(b, b1, b2)
+            self.dateEdit3.setDisplayFormat("yyyy-MM-dd")
+            self.dateEdit3.setDate(QtCore.QDate(b, b1, b2))
         if day1 > datetime.date(b, b1, b2):
             day1 = datetime.date(b, b1, b2)
-        data = dict()
-        a = self.balance_calculation(day1)
-        a = sum([a[x] for x in a.keys() if x in accums])
-        print(a)
-        for good in session.query(balance.Balance).filter(balance.Balance.date.between(day1, day2)):
-            if good.name_det in accums:
-                if good.date in data:
-                    data[good.date] += int(good.quantity)
-                else:
-                    data[good.date] = int(good.quantity)
-        ostatki = [a] + [data[x] for x in sorted(data.keys())]
-        self.graphWidget.clear()
-        days = [f"{day1.year}-{day1.month}-{day1.day}"]
-        day = day1
-        while day != day2:
-            day = day + datetime.timedelta(days=1)
-            days.append(f"{day.year}-{day.month}-{day.day}")
-        key_data = []
-        for i in list(data.keys()):
-            key_data.append((f"{i.year}-{i.month}-{i.day}", days.index(f"{i.year}-{i.month}-{i.day}"), data[i]))
-        if key_data:
-            key_data = sorted(key_data, key=lambda x: x[1])
-        ostatki = []
-        for i in range(len(key_data)):
-            index_start = key_data[i][1]
-            index_end = key_data[i + 1][1] if i + 1 < len(key_data) else len(days)
-            value = key_data[i][2]
-            ostatki += [value] * int(index_end - index_start)
-        ostatki = [a] + ostatki
-        days = [i for i in range(len(ostatki))]
-        if days == [0]:
-            days += [0.25]
-            ostatki += ostatki
-        if ostatki:
-            # в переменной days лежат все дни за которые нужна информация об остатках
-            # из дб загрузи все данные в переменную ostatki
+            self.dateEdit.setDisplayFormat("yyyy-MM-dd")
+            self.dateEdit.setDate(QtCore.QDate(b, b1, b2))
+        if day1 > day2:
+            self.graphWidget.clear()
+            fl = False
+        if fl:
+            data = dict()
+            a = self.balance_calculation(day1)
+            a = sum([a[x] for x in a.keys() if x in accums])
+            for good in session.query(balance.Balance).filter(balance.Balance.date.between(day1, day2)):
+                if good.name_det in accums:
+                    if good.date in data:
+                        data[good.date] += int(good.quantity)
+                    else:
+                        data[good.date] = int(good.quantity)
+            ostatki = [a] + [data[x] for x in sorted(data.keys())]
+            self.graphWidget.clear()
+            days = [f"{day1.year}-{day1.month}-{day1.day}"]
+            day = day1
+            while day != day2:
+                day = day + datetime.timedelta(days=1)
+                days.append(f"{day.year}-{day.month}-{day.day}")
+            key_data = []
+            for i in list(data.keys()):
+                key_data.append((f"{i.year}-{i.month}-{i.day}", days.index(f"{i.year}-{i.month}-{i.day}"), data[i]))
+            if key_data:
+                key_data = sorted(key_data, key=lambda x: x[1])
+            ostatki = []
+            for i in range(len(key_data)):
+                index_start = key_data[i][1]
+                index_end = key_data[i + 1][1] if i + 1 < len(key_data) else len(days)
+                value = key_data[i][2]
+                ostatki += [value] * int(index_end - index_start)
+            ostatki = [a] + ostatki
+            days = [i for i in range(len(ostatki))]
+            if days == [0]:
+                days += [0.25]
+                ostatki += ostatki
+            if ostatki:
+                # в переменной days лежат все дни за которые нужна информация об остатках
+                # из дб загрузи все данные в переменную ostatki
 
-            # self.graphWidget.addLegend() вдруг понадобится
-            self.graphWidget.showGrid(x=True, y=True)
-            self.graphWidget.setXRange(0, int(10), padding=0)
-            self.graphWidget.setYRange(0, int(max(ostatki) * 1.1), padding=0)
+                # self.graphWidget.addLegend() вдруг понадобится
+                self.graphWidget.showGrid(x=True, y=True)
+                self.graphWidget.setXRange(0, int(10), padding=0)
+                self.graphWidget.setYRange(0, int(max(ostatki) * 1.1), padding=0)
 
-            self.graphWidget.setBackground('w')
+                self.graphWidget.setBackground('w')
 
-            pen = pg.mkPen(color=(0, 255, 0), width=5)
-            self.graphWidget.plot(days, ostatki, pen=pen)
+                pen = pg.mkPen(color=(0, 255, 0), width=5)
+                self.graphWidget.plot(days, ostatki, pen=pen)
 
     def balance_calculation(self, date):
         """Подсчет остатков"""
