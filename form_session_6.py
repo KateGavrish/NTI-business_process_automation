@@ -39,14 +39,14 @@ class Ui_Session6(object):
         b2 = datetime.date.today().day
 
         self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
-        self.dateEdit.setGeometry(QtCore.QRect(328, 37, 161, 28))
+        self.dateEdit.setGeometry(QtCore.QRect(273, 37, 161, 28))
         self.dateEdit.setObjectName("dateEdit")
         self.dateEdit.setCalendarPopup(True)
         self.dateEdit.setDisplayFormat("yyyy-MM-dd")
         self.dateEdit.setDate(QtCore.QDate(b, b1, b2))
 
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(510, 25, 300, 51))
+        self.label_3.setGeometry(QtCore.QRect(455, 25, 300, 51))
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_2")
 
@@ -55,7 +55,7 @@ class Ui_Session6(object):
         b2 = datetime.date.today().day
 
         self.dateEdit3 = QtWidgets.QDateEdit(self.centralwidget)
-        self.dateEdit3.setGeometry(QtCore.QRect(538, 37, 161, 28))
+        self.dateEdit3.setGeometry(QtCore.QRect(505, 37, 161, 28))
         self.dateEdit3.setObjectName("dateEdit")
         self.dateEdit3.setCalendarPopup(True)
         self.dateEdit3.setDisplayFormat("yyyy-MM-dd")
